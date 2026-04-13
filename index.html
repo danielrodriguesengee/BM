@@ -137,13 +137,19 @@
 
     <!-- CATALOGO -->
     <main class="max-w-5xl mx-auto px-4 pb-24">
-        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Indicador de Carregamento -->
+        <div id="loading-indicator" class="flex flex-col items-center justify-center py-10 text-gold">
+            <div class="loader mb-4 w-10 h-10 border-4"></div>
+            <p>Carregando catálogo...</p>
+        </div>
+
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
             <!-- Renderizado via JS -->
         </div>
 
-        <div class="mt-16 pt-8 border-t border-white/10 text-center">
+        <div id="samples-section" class="mt-16 pt-8 border-t border-white/10 text-center hidden">
             <h3 class="font-serif text-2xl font-bold mb-6 text-white">Amostras e Provas</h3>
-            <div id="samples-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div id="samples-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 <!-- Renderizado via JS -->
             </div>
         </div>
@@ -151,42 +157,50 @@
 
     <!-- MODAL DO PRODUTO (CONFIGURADOR) -->
     <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-card w-full max-w-2xl rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="bg-card w-full max-w-2xl rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
             
-            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-darker">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-darker z-10">
                 <h3 id="pm-title" class="font-serif font-bold text-xl gold-gradient-text">Nome do Produto</h3>
                 <button onclick="closeProductModal()" class="text-silver hover:text-white"><i class="fas fa-times text-xl"></i></button>
             </div>
 
-            <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
-                <p id="pm-desc" class="text-sm text-silver mb-6"></p>
-                
-                <!-- Lotes -->
-                <div class="mb-6">
-                    <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">1. Escolha a Quantidade (Lote)</label>
-                    <div id="pm-lots" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <!-- Render via JS -->
-                    </div>
+            <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col">
+                <!-- Imagem do Modal -->
+                <div id="pm-img-container" class="w-full h-48 bg-darker hidden flex-shrink-0 relative">
+                    <img id="pm-img" src="" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 bg-gradient-to-t from-card to-transparent"></div>
                 </div>
 
-                <!-- Adicionais -->
-                <div id="pm-extras-container" class="mb-6 hidden">
-                    <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">2. Acabamentos Adicionais (Valor por un.)</label>
-                    <div id="pm-extras" class="space-y-2">
-                        <!-- Render via JS -->
+                <div class="p-6">
+                    <p id="pm-desc" class="text-sm text-silver mb-6"></p>
+                    
+                    <!-- Lotes -->
+                    <div class="mb-6">
+                        <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">1. Escolha a Quantidade (Lote)</label>
+                        <div id="pm-lots" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <!-- Render via JS -->
+                        </div>
                     </div>
-                </div>
 
-                <!-- Resumo -->
-                <div class="bg-darker p-4 rounded-lg border border-gold/20 flex justify-between items-center">
-                    <div>
-                        <p class="text-xs text-silver">Valor Total do Lote:</p>
-                        <p id="pm-total" class="font-bold text-2xl text-gold">R$ 0,00</p>
-                        <p id="pm-unit-price" class="text-[10px] text-silver mt-1">Ref. R$ 0,00 / un</p>
+                    <!-- Adicionais -->
+                    <div id="pm-extras-container" class="mb-6 hidden">
+                        <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">2. Acabamentos Adicionais (Valor por un.)</label>
+                        <div id="pm-extras" class="space-y-2">
+                            <!-- Render via JS -->
+                        </div>
                     </div>
-                    <button onclick="addToCart()" class="btn-gold px-6 py-3 rounded font-bold shadow-lg flex items-center gap-2">
-                        Adicionar <i class="fas fa-plus"></i>
-                    </button>
+
+                    <!-- Resumo -->
+                    <div class="bg-darker p-4 rounded-lg border border-gold/20 flex justify-between items-center mt-auto">
+                        <div>
+                            <p class="text-xs text-silver">Valor Total do Lote:</p>
+                            <p id="pm-total" class="font-bold text-2xl text-gold">R$ 0,00</p>
+                            <p id="pm-unit-price" class="text-[10px] text-silver mt-1">Ref. R$ 0,00 / un</p>
+                        </div>
+                        <button onclick="addToCart()" class="btn-gold px-6 py-3 rounded font-bold shadow-lg flex items-center gap-2">
+                            Adicionar <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -254,100 +268,11 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
-        // --- DADOS DO CATÁLOGO ---
-        const bd = {
-            produtos: [
-                {
-                    id: 'mod-m',
-                    nome: 'Modelo M (15x19x5)',
-                    descricao: 'Capacidade 750g a 800g. Modelo padrão de mercado. Anti vazamento revestidas. Ideal para: comida brasileira, petiscos, lasanhas, carnes.',
-                    lotes: [
-                        { qtd: 500, precoUn: 3.50, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 1000, precoUn: 2.99, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 2000, precoUn: 2.70, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 3000, precoUn: 2.57, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 5000, precoUn: 2.47, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 10000, precoUn: 2.30, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 100, precoUn: 2.40, desc: 'Sem Impressão, C/ Divisórias' },
-                        { qtd: 100, precoUn: 1.99, desc: 'Sem Impressão, S/ Divisórias' }
-                    ],
-                    extras: [
-                        { id: 'lam-met', nome: 'Laminação no Metalizado', precoAdd: 0.20 }
-                    ],
-                    icone: 'fa-box-open'
-                },
-                {
-                    id: 'mod-g',
-                    nome: 'Modelo G (25x17x5)',
-                    descricao: 'Capacidade 900g a 1200g. Ideal para feijoadas completas, churrasco e porções maiores. Opção de divisórias verticais ou horizontais.',
-                    lotes: [
-                        { qtd: 500, precoUn: 3.85, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 1000, precoUn: 3.25, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 2000, precoUn: 3.10, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 3000, precoUn: 2.88, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 5000, precoUn: 2.78, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 10000, precoUn: 2.56, desc: 'Arte 4x0 + 3 Divisórias' },
-                        { qtd: 100, precoUn: 2.50, desc: 'Sem Impressão, C/ Divisórias' },
-                        { qtd: 100, precoUn: 1.85, desc: 'Sem Impressão, S/ Divisórias' }
-                    ],
-                    extras: [
-                        { id: 'lam-met-g', nome: 'Laminação no Metalizado (Caixa)', precoAdd: 0.20 },
-                        { id: 'lam-berco', nome: 'Laminação Metalizada (Por Berço/Divisória)', precoAdd: 0.05 }
-                    ],
-                    icone: 'fa-box'
-                },
-                {
-                    id: 'mod-p',
-                    nome: 'Modelo P (10x15x5)',
-                    descricao: 'Suporta até 450g. Este modelo não tem caixas internas, apenas separador de ambientes.',
-                    lotes: [
-                        { qtd: 500, precoUn: 2.40, desc: 'Arte Padrão + Separador' },
-                        { qtd: 1000, precoUn: 2.20, desc: 'Arte Padrão + Separador' },
-                        { qtd: 3000, precoUn: 1.65, desc: 'Arte Padrão + Separador' },
-                        { qtd: 6000, precoUn: 1.30, desc: 'Arte Padrão + Separador' },
-                        { qtd: 10000, precoUn: 1.25, desc: 'Arte Padrão + Separador' }
-                    ],
-                    extras: [
-                        { id: 'lam-met-p', nome: 'Laminação no Metalizado', precoAdd: 0.20 }
-                    ],
-                    icone: 'fa-cube'
-                },
-                {
-                    id: 'mod-g1',
-                    nome: 'Modelo G1 (27x17x7)',
-                    descricao: 'Capacidade 1100g a 1600g. O maior da linha. Para churrasco, carnes grandes e refeições em família.',
-                    lotes: [
-                        { qtd: 250, precoUn: 5.90, desc: 'Arte 2x0 + 3 Bandejas' },
-                        { qtd: 500, precoUn: 4.85, desc: 'Arte 3x0 + 3 Bandejas' },
-                        { qtd: 1000, precoUn: 3.89, desc: 'Arte 4x0 + 3 Bandejas' },
-                        { qtd: 100, precoUn: 3.75, desc: 'Branca ou Kraft (S/ Personalização)' }
-                    ],
-                    extras: [
-                        { id: 'lam-met-g1', nome: 'Laminação Metalizada (Caixa)', precoAdd: 0.20 },
-                        { id: 'lam-berco-g1', nome: 'Laminação Metalizada (Caixa Interna)', precoAdd: 0.08 }
-                    ],
-                    icone: 'fa-boxes'
-                }
-            ],
-            amostras: [
-                {
-                    id: 'amostra-padrao',
-                    nome: 'Kit Amostras Físicas',
-                    descricao: 'Enviada em fase final para avaliação física. Valor devolvido em crédito no fechamento do pedido.',
-                    preco: 75.00,
-                    icone: 'fa-search'
-                },
-                {
-                    id: 'amostra-digital',
-                    nome: 'Provas Físicas c/ Sua Marca (5 un)',
-                    descricao: '5 unidades impressas com sua marca para fotos e preparação de cardápio antes do lote oficial.',
-                    preco: 150.00,
-                    icone: 'fa-camera'
-                }
-            ]
-        };
+        // --- CONSTANTES ---
+        const API_JSON_URL = 'https://api.npoint.io/41aa4bf80479b83f68d7';
 
         // --- ESTADO DA APLICAÇÃO ---
+        let bd = { produtos: [], amostras: [] };
         let carrinho = [];
         let configAtual = { produto: null, loteIndex: -1, extrasSelecionados: {} };
         let valorFrete = 0;
@@ -355,8 +280,29 @@
         let endDestino = {};
 
         // --- INICIALIZAÇÃO ---
-        function init() {
-            renderizarCatalogo();
+        async function init() {
+            await carregarDadosDoNpoint();
+        }
+
+        async function carregarDadosDoNpoint() {
+            try {
+                // Adicionado tempo (Date.now) para não pegar cache e atualizar na hora
+                const response = await fetch(`${API_JSON_URL}?t=${Date.now()}`);
+                const data = await response.json();
+                
+                if(data && data.produtos) {
+                    bd = data;
+                    document.getElementById('loading-indicator').classList.add('hidden');
+                    document.getElementById('products-grid').classList.remove('hidden');
+                    document.getElementById('samples-section').classList.remove('hidden');
+                    renderizarCatalogo();
+                } else {
+                    throw new Error("JSON inválido ou vazio");
+                }
+            } catch (error) {
+                console.error("Erro ao carregar os dados:", error);
+                document.getElementById('loading-indicator').innerHTML = `<p class="text-red-400">Erro ao carregar o catálogo. Recarregue a página.</p>`;
+            }
         }
 
         function formatarMoeda(valor) {
@@ -365,35 +311,50 @@
 
         function renderizarCatalogo() {
             const grid = document.getElementById('products-grid');
-            grid.innerHTML = bd.produtos.map(p => `
-                <div class="bg-card rounded-xl p-6 card-hover cursor-pointer" onclick="abrirModalProduto('${p.id}')">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 rounded bg-dark flex items-center justify-center text-gold border border-white/5">
-                            <i class="fas ${p.icone} text-2xl"></i>
+            
+            // Loop para criar os cards com a nova estrutura de imagem
+            grid.innerHTML = bd.produtos.map(p => {
+                // Previne erros se a array de lotes estiver vazia
+                const qtdBase = p.lotes && p.lotes.length > 0 ? p.lotes[p.lotes.length-1].qtd : 0;
+                
+                return `
+                <div class="bg-card rounded-xl border border-white/5 card-hover cursor-pointer overflow-hidden flex flex-col group" onclick="abrirModalProduto('${p.id}')">
+                    <div class="h-48 w-full relative bg-darker">
+                        <img src="${p.imagem}" alt="Foto de ${p.nome}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-300" onerror="this.src='https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'">
+                        <div class="absolute top-3 right-3 bg-darker/90 backdrop-blur text-gold text-[10px] px-2 py-1 rounded border border-gold/30 font-bold uppercase tracking-wider shadow-lg">
+                            A partir de ${qtdBase} un
                         </div>
-                        <span class="bg-white/5 text-silver text-[10px] px-2 py-1 rounded font-medium uppercase tracking-wider">Lotes a partir de ${p.lotes[p.lotes.length-1].qtd} un</span>
                     </div>
-                    <h3 class="font-serif font-bold text-xl text-white mb-2">${p.nome}</h3>
-                    <p class="text-sm text-silver line-clamp-2 mb-4">${p.descricao}</p>
-                    <div class="flex items-center text-gold font-medium text-sm gap-2">
-                        <span>Configurar Lote</span> <i class="fas fa-arrow-right text-xs"></i>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas ${p.icone} text-gold"></i>
+                            <h3 class="font-serif font-bold text-xl text-white leading-tight">${p.nome}</h3>
+                        </div>
+                        <p class="text-sm text-silver line-clamp-3 mb-4 flex-1">${p.descricao}</p>
+                        <div class="flex justify-between items-center text-gold font-medium text-sm mt-auto border-t border-white/5 pt-4">
+                            <span>Configurar Lote</span> 
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
 
             const samplesGrid = document.getElementById('samples-grid');
             samplesGrid.innerHTML = bd.amostras.map(a => `
-                <div class="bg-card border border-dashed border-white/20 rounded-xl p-6 flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-full bg-dark flex items-center justify-center text-silver mx-auto mb-3">
-                            <i class="fas ${a.icone}"></i>
+                <div class="bg-card border border-dashed border-white/20 rounded-xl overflow-hidden flex flex-col">
+                    <div class="h-28 w-full relative bg-darker flex items-center justify-center overflow-hidden">
+                        <img src="${a.imagem}" alt="${a.nome}" class="w-full h-full object-cover opacity-50 blur-[2px]" onerror="this.style.display='none'">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas ${a.icone} text-3xl text-gold drop-shadow-md"></i>
                         </div>
-                        <h4 class="font-bold text-white mb-2">${a.nome}</h4>
-                        <p class="text-xs text-silver mb-4">${a.descricao}</p>
                     </div>
-                    <div class="flex justify-between items-center mt-auto pt-4 border-t border-white/5">
-                        <span class="font-bold text-gold">${formatarMoeda(a.preco)}</span>
-                        <button onclick="adicionarAmostra('${a.id}')" class="btn-outline-gold px-3 py-1 text-xs rounded font-bold">Adicionar</button>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h4 class="font-bold text-white mb-2">${a.nome}</h4>
+                        <p class="text-xs text-silver mb-4 flex-1">${a.descricao}</p>
+                        <div class="flex justify-between items-center mt-auto pt-3 border-t border-white/5">
+                            <span class="font-bold text-gold">${formatarMoeda(a.preco)}</span>
+                            <button onclick="adicionarAmostra('${a.id}')" class="btn-outline-gold px-3 py-1 text-xs rounded font-bold">Adicionar</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -407,6 +368,18 @@
             
             document.getElementById('pm-title').innerText = produto.nome;
             document.getElementById('pm-desc').innerText = produto.descricao;
+
+            // Mostrar a imagem no modal se ela existir no JSON
+            const imgContainer = document.getElementById('pm-img-container');
+            const imgEl = document.getElementById('pm-img');
+            if (produto.imagem) {
+                imgEl.src = produto.imagem;
+                // Previne imagem quebrada e usa a padrão
+                imgEl.onerror = () => { imgEl.src = 'https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'; };
+                imgContainer.classList.remove('hidden');
+            } else {
+                imgContainer.classList.add('hidden');
+            }
 
             // Renderizar Lotes
             const divLotes = document.getElementById('pm-lots');
@@ -525,7 +498,6 @@
             atualizarCarrinho();
             mostrarToast("Lote adicionado ao orçamento!");
             
-            // Recalcular frete se houver CEP digitado após adicionar novo item
             if (document.getElementById('cep-input').value.length >= 8) {
                 calcularFrete();
             }
@@ -611,7 +583,6 @@
             input.value = value;
         }
 
-        // --- CÁLCULO DE FRETE ATUALIZADO (Ajustado com os seus números reais) ---
         async function calcularFrete() {
             const cepInput = document.getElementById('cep-input').value.replace(/\D/g, '');
             const resultDiv = document.getElementById('frete-result');
@@ -641,7 +612,6 @@
                 endDestino = data;
                 const uf = data.uf;
                 
-                // Pega a quantidade total de embalagens no carrinho
                 let totalUnidades = carrinho.reduce((acc, item) => item.tipo === 'lote' ? acc + item.qtdItens : acc, 0);
                 
                 let tarifaBase = 0;
@@ -652,9 +622,6 @@
                 const regiaoNE = ['BA', 'SE', 'AL', 'PE', 'PB', 'RN', 'CE', 'PI', 'MA'];
                 const regiaoN = ['AM', 'PA', 'AC', 'RR', 'RO', 'AP', 'TO'];
 
-                // FÓRMULA AJUSTADA BASEADA NOS SEUS NÚMEROS:
-                // MG (Sudeste) -> 100un = R$ 50,00  | 500un = R$ 120,00
-                // Isso significa uma taxa base de R$ 32,50 + R$ 0,175 por caixa.
                 if(uf === 'RS') { 
                     tarifaBase = 20.00; taxaPorUnidade = 0.10; 
                 }
@@ -671,9 +638,7 @@
                     tarifaBase = 70.00; taxaPorUnidade = 0.30; 
                 }
 
-                // Cálculo Final
                 valorFrete = tarifaBase + (totalUnidades * taxaPorUnidade);
-
                 cepDestino = `${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
                 
                 resultDiv.innerHTML = `<span class="text-green-400"><i class="fas fa-check-circle"></i> Envio via transportadora para ${data.localidade}/${data.uf}</span>`;
@@ -696,7 +661,6 @@
             }
         }
 
-        // --- CHECKOUT WHATSAPP ---
         function finalizarPedido() {
             const nome = document.getElementById('client-name').value;
             const cnpj = document.getElementById('client-cnpj').value;
@@ -736,14 +700,12 @@
             msg += `-----------------------------------%0A`;
             msg += `_Orçamento gerado via Catálogo Online_`;
 
-            // Número genérico para envio (Substituir pelo número real da empresa)
             const numeroWhatsApp = "5551999999999"; 
             const link = `https://wa.me/${numeroWhatsApp}?text=${msg}`;
             
             window.open(link, '_blank');
         }
 
-        // --- UTILIDADES ---
         function mostrarToast(mensagem) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = mensagem;
@@ -754,7 +716,8 @@
             }, 3000);
         }
 
-        init();
+        // Chama a inicialização ao carregar
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
