@@ -3,52 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BM Embalagens Personalizadas | Orçamentos</title>
+    <title>BM Embalagens Personalizadas | Catálogo</title>
     
-    <!-- Ícone do site (Favicon) adicionado aqui -->
-    <link rel="icon" type="image/png" href="image/logo.webp">
-    <link rel="apple-touch-icon" href="image/logo.webp">
+    <!-- Ícone da aba do navegador (Favicon) -->
+    <link rel="icon" type="image/png" href="image/logo.png">
+    <link rel="apple-touch-icon" href="image/logo.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#1a1c20',
-                        darker: '#121417',
-                        card: '#24272c',
-                        gold: '#D4AF37',
-                        goldhover: '#B5952F',
-                        silver: '#C0C0C0'
-                    },
-                    fontFamily: {
-                        sans: ['Montserrat', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
-        body {
-            background-color: #121417;
-            color: #f5f5f5;
-            -webkit-tap-highlight-color: transparent;
+        /* VARIÁVEIS DO TEMA CLARO E ESCURO */
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-darker: #f1f5f9;
+            --bg-nav: rgba(255, 255, 255, 0.9);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #AA771C 100%);
         }
+
+        .dark-mode {
+            --bg-body: #121417;
+            --bg-card: #24272c;
+            --bg-darker: #1a1c20;
+            --bg-nav: rgba(26, 28, 32, 0.9);
+            --text-primary: #f5f5f5;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Classes Utilitárias do Tema */
+        .theme-bg-card { background-color: var(--bg-card); }
+        .theme-bg-darker { background-color: var(--bg-darker); }
+        .theme-bg-nav { background-color: var(--bg-nav); }
+        .theme-text-primary { color: var(--text-primary); }
+        .theme-text-secondary { color: var(--text-secondary); }
+        .theme-border { border-color: var(--border-color); }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1a1c20; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: var(--bg-darker); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
 
         .glass-header {
-            background: rgba(26, 28, 32, 0.85);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .gold-gradient-text {
@@ -59,7 +68,7 @@
         }
 
         .btn-gold {
-            background: linear-gradient(135deg, #D4AF37 0%, #AA771C 100%);
+            background: var(--gold-gradient);
             color: #fff;
             transition: all 0.3s ease;
         }
@@ -73,25 +82,25 @@
             color: #D4AF37;
             transition: all 0.3s;
         }
-        .btn-outline-gold:hover, .btn-outline-gold.active {
+        .btn-outline-gold:hover {
             background: rgba(212, 175, 55, 0.15);
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
         }
 
-        .card-hover { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05); }
+        .card-hover { transition: all 0.3s ease; border: 1px solid var(--border-color); }
         .card-hover:hover {
             transform: translateY(-5px);
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
-        .input-dark {
-            background: #1a1c20;
-            border: 1px solid #333;
-            color: #fff;
+        .input-theme {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
             transition: all 0.3s;
         }
-        .input-dark:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); }
+        .input-theme:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); }
 
         .loader {
             border: 3px solid rgba(212, 175, 55, 0.2);
@@ -107,97 +116,128 @@
 <body class="font-sans antialiased custom-scrollbar">
 
     <!-- HEADER -->
-    <header class="fixed top-0 w-full z-40 glass-header">
+    <header class="fixed top-0 w-full z-40 glass-header theme-bg-nav">
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <!-- Substituição da caixa de texto 'BM' pela imagem do logótipo -->
-                <img src="image/logo.webp" alt="Logótipo BM Embalagens" class="h-10 w-auto object-contain">
+                <!-- Logotipo -->
+                <img src="image/logo.png" alt="Logótipo BM Embalagens" class="h-10 w-auto object-contain drop-shadow-md">
                 <div class="hidden sm:block">
-                    <h1 class="font-serif font-bold text-lg leading-tight tracking-wide text-white">EMBALAGENS</h1>
-                    <p class="text-[9px] text-silver uppercase tracking-[0.2em]">Personalizadas Ltda.</p>
+                    <h1 class="font-serif font-bold text-lg leading-tight tracking-wide theme-text-primary">EMBALAGENS</h1>
+                    <p class="text-[9px] theme-text-secondary uppercase tracking-[0.2em]">Personalizadas Ltda.</p>
                 </div>
             </div>
             
-            <button onclick="toggleCart()" class="relative text-gold hover:text-white transition p-2 flex items-center gap-2">
-                <span class="hidden sm:inline text-sm font-medium">Orçamento</span>
-                <i class="fas fa-shopping-cart text-xl"></i>
-                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
-            </button>
+            <div class="flex items-center gap-4">
+                <!-- Botão de Tema -->
+                <button onclick="toggleTheme()" class="theme-text-secondary hover:text-[#D4AF37] transition text-xl p-2 focus:outline-none" aria-label="Alternar Tema">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+
+                <button onclick="toggleCart()" class="relative text-[#D4AF37] hover:opacity-80 transition p-2 flex items-center gap-2">
+                    <span class="hidden sm:inline text-sm font-medium theme-text-primary">Orçamento</span>
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- HERO SECTION -->
-    <section class="pt-28 pb-10 px-4 max-w-5xl mx-auto text-center">
-        <h2 class="font-serif text-3xl md:text-5xl font-bold mb-4">Sua marca <span class="gold-gradient-text">em destaque.</span></h2>
-        <p class="text-silver text-sm md:text-base max-w-2xl mx-auto mb-8">Embalagens premium anti vazamento, 100% seguras (livre de BPA) com laminação em PP. Perfeitas para ir ao micro-ondas, forno e freezer.</p>
+    <section class="pt-28 pb-6 px-4 max-w-5xl mx-auto text-center">
+        <h2 class="font-serif text-3xl md:text-5xl font-bold mb-4 theme-text-primary">Sua marca <span class="gold-gradient-text">em destaque.</span></h2>
+        <p class="theme-text-secondary text-sm md:text-base max-w-2xl mx-auto mb-8">Unimos design e engenharia de papel para criar embalagens que elevam a percepção de sofisticação do seu produto.</p>
         
         <div class="flex flex-wrap justify-center gap-4 text-xs font-medium">
-            <div class="bg-card px-4 py-2 rounded-full border border-white/5"><i class="fas fa-leaf text-green-500 mr-2"></i>Sustentável</div>
-            <div class="bg-card px-4 py-2 rounded-full border border-white/5"><i class="fas fa-fire text-red-400 mr-2"></i>Até 280°C</div>
-            <div class="bg-card px-4 py-2 rounded-full border border-white/5"><i class="fas fa-tint-slash text-blue-400 mr-2"></i>Zero Vazamento</div>
+            <div class="theme-bg-card px-4 py-2 rounded-full border theme-border shadow-sm"><i class="fas fa-leaf text-green-500 mr-2"></i>Sustentável</div>
+            <div class="theme-bg-card px-4 py-2 rounded-full border theme-border shadow-sm"><i class="fas fa-fire text-red-400 mr-2"></i>Até 280°C</div>
+            <div class="theme-bg-card px-4 py-2 rounded-full border theme-border shadow-sm"><i class="fas fa-tint-slash text-blue-400 mr-2"></i>Zero Vazamento</div>
         </div>
     </section>
 
-    <!-- CATALOGO -->
+    <!-- MAIN APP AREA -->
     <main class="max-w-5xl mx-auto px-4 pb-24">
-        <!-- Indicador de Carregamento -->
-        <div id="loading-indicator" class="flex flex-col items-center justify-center py-10 text-gold">
+        
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="flex flex-col items-center justify-center py-10 text-[#D4AF37]">
             <div class="loader mb-4 w-10 h-10 border-4"></div>
-            <p>Carregando catálogo...</p>
+            <p class="font-medium">Carregando catálogo...</p>
         </div>
 
-        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
-            <!-- Renderizado via JS -->
-        </div>
+        <div id="app-content" class="hidden">
+            <!-- CATEGORIAS -->
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-1 h-6 bg-[#D4AF37] rounded-full"></div>
+                    <h3 class="font-serif text-2xl font-bold theme-text-primary">Nossas Linhas</h3>
+                </div>
+                <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
 
-        <div id="samples-section" class="mt-16 pt-8 border-t border-white/10 text-center hidden">
-            <h3 class="font-serif text-2xl font-bold mb-6 text-white">Amostras e Provas</h3>
-            <div id="samples-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                <!-- Renderizado via JS -->
+            <!-- PRODUTOS -->
+            <div id="products-section" class="pt-4 border-t theme-border border-dashed">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 id="category-title" class="font-serif text-2xl font-bold theme-text-primary">Marmitas Anti-Vazamento</h3>
+                </div>
+                
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Renderizado via JS -->
+                </div>
+
+                <!-- Empty State de Produtos -->
+                <div id="empty-products" class="hidden text-center py-12 theme-bg-darker rounded-xl border theme-border border-dashed">
+                    <i class="fas fa-box-open text-4xl text-[#D4AF37] opacity-50 mb-4"></i>
+                    <p class="theme-text-secondary font-medium">Nenhum produto cadastrado nesta categoria ainda.</p>
+                </div>
+            </div>
+
+            <!-- AMOSTRAS -->
+            <div id="samples-section" class="mt-16 pt-8 border-t theme-border text-center">
+                <h3 class="font-serif text-2xl font-bold mb-6 theme-text-primary">Amostras e Provas</h3>
+                <div id="samples-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <!-- Renderizado via JS -->
+                </div>
             </div>
         </div>
     </main>
 
     <!-- MODAL DO PRODUTO (CONFIGURADOR) -->
-    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="bg-card w-full max-w-2xl rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
+    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="theme-bg-card w-full max-w-2xl rounded-xl border theme-border shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
             
-            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-darker z-20">
+            <div class="p-4 border-b theme-border flex justify-between items-center theme-bg-darker z-20">
                 <h3 id="pm-title" class="font-serif font-bold text-xl gold-gradient-text">Nome do Produto</h3>
-                <button onclick="closeProductModal()" class="text-silver hover:text-white"><i class="fas fa-times text-xl"></i></button>
+                <button onclick="closeProductModal()" class="theme-text-secondary hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
             </div>
 
             <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col">
-                <!-- Imagens do Modal (Carrossel) -->
-                <div id="pm-img-container" class="w-full h-48 bg-darker hidden flex-shrink-0 relative carousel-container">
-                    <!-- Imagens inseridas via JS -->
+                <div id="pm-img-container" class="w-full h-48 theme-bg-darker hidden flex-shrink-0 relative carousel-container">
+                    <!-- Imagens JS -->
                 </div>
 
                 <div class="p-6 relative z-10">
-                    <p id="pm-desc" class="text-sm text-silver mb-6"></p>
+                    <p id="pm-desc" class="text-sm theme-text-secondary mb-6"></p>
                     
-                    <!-- Lotes -->
                     <div class="mb-6">
-                        <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">1. Escolha a Quantidade (Lote)</label>
+                        <label class="block text-xs uppercase tracking-wider theme-text-secondary mb-3 font-bold">1. Escolha a Quantidade (Lote)</label>
                         <div id="pm-lots" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <!-- Render via JS -->
                         </div>
                     </div>
 
-                    <!-- Adicionais -->
                     <div id="pm-extras-container" class="mb-6 hidden">
-                        <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">2. Acabamentos Adicionais (Valor por un.)</label>
+                        <label class="block text-xs uppercase tracking-wider theme-text-secondary mb-3 font-bold">2. Acabamentos Adicionais (Valor por un.)</label>
                         <div id="pm-extras" class="space-y-2">
                             <!-- Render via JS -->
                         </div>
                     </div>
 
-                    <!-- Resumo -->
-                    <div class="bg-darker p-4 rounded-lg border border-gold/20 flex justify-between items-center mt-auto">
+                    <div class="theme-bg-darker p-4 rounded-lg border border-[#D4AF37]/30 flex justify-between items-center mt-auto shadow-sm">
                         <div>
-                            <p class="text-xs text-silver">Valor Total do Lote:</p>
-                            <p id="pm-total" class="font-bold text-2xl text-gold">R$ 0,00</p>
-                            <p id="pm-unit-price" class="text-[10px] text-silver mt-1">Ref. R$ 0,00 / un</p>
+                            <p class="text-xs theme-text-secondary">Valor Total do Lote:</p>
+                            <p id="pm-total" class="font-bold text-2xl text-[#D4AF37]">R$ 0,00</p>
+                            <p id="pm-unit-price" class="text-[10px] theme-text-secondary mt-1">Ref. R$ 0,00 / un</p>
                         </div>
                         <button onclick="addToCart()" class="btn-gold px-6 py-3 rounded font-bold shadow-lg flex items-center gap-2">
                             Adicionar <i class="fas fa-plus"></i>
@@ -209,51 +249,50 @@
     </div>
 
     <!-- DRAWER DO CARRINHO & CHECKOUT -->
-    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-card border-l border-white/10 shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="p-5 border-b border-white/10 flex justify-between items-center bg-darker">
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full md:w-[450px] theme-bg-card border-l theme-border shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b theme-border flex justify-between items-center theme-bg-darker">
             <h2 class="font-serif font-bold text-xl gold-gradient-text">Seu Orçamento</h2>
-            <button onclick="toggleCart()" class="text-silver hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            <button onclick="toggleCart()" class="theme-text-secondary hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scrollbar p-5">
             <div id="cart-items" class="space-y-4 mb-8">
-                <!-- Itens do Carrinho -->
+                <!-- Itens -->
             </div>
 
-            <!-- Calculo de Frete Ajustado -->
-            <div class="bg-darker p-4 rounded-xl border border-white/5 mb-6">
-                <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-truck text-gold"></i> Cálculo de Frete Estimado</h4>
-                <p class="text-[10px] text-silver mb-3">Origem: Parobé - RS (CEP: 95630-000)</p>
+            <!-- Calculo Frete -->
+            <div class="theme-bg-darker p-4 rounded-xl border theme-border mb-6 shadow-sm">
+                <h4 class="text-sm font-bold theme-text-primary mb-3 flex items-center gap-2"><i class="fas fa-truck text-[#D4AF37]"></i> Frete Estimado</h4>
+                <p class="text-[10px] theme-text-secondary mb-3">Origem: Parobé - RS (CEP: 95630-000)</p>
                 <div class="flex gap-2 mb-2">
-                    <input type="text" id="cep-input" maxlength="9" placeholder="Digite seu CEP" class="input-dark w-full px-3 py-2 rounded text-sm" onkeyup="mascaraCEP(this)">
+                    <input type="text" id="cep-input" maxlength="9" placeholder="Digite seu CEP" class="input-theme w-full px-3 py-2 rounded text-sm" onkeyup="mascaraCEP(this)">
                     <button onclick="calcularFrete()" class="btn-outline-gold px-4 rounded text-sm font-medium whitespace-nowrap" id="btn-calc-frete">Calcular</button>
                 </div>
-                <div id="frete-result" class="text-xs text-silver hidden"></div>
+                <div id="frete-result" class="text-xs hidden"></div>
             </div>
 
-            <!-- Dados do Cliente -->
-            <div class="bg-darker p-4 rounded-xl border border-white/5">
-                <h4 class="text-sm font-bold text-white mb-3">Dados para Contato</h4>
+            <!-- Contato -->
+            <div class="theme-bg-darker p-4 rounded-xl border theme-border shadow-sm">
+                <h4 class="text-sm font-bold theme-text-primary mb-3">Dados para Contato</h4>
                 <div class="space-y-3">
-                    <input type="text" id="client-name" placeholder="Seu Nome / Empresa" class="input-dark w-full px-3 py-2 rounded text-sm">
-                    <input type="text" id="client-cnpj" placeholder="CNPJ / CPF" class="input-dark w-full px-3 py-2 rounded text-sm">
+                    <input type="text" id="client-name" placeholder="Seu Nome / Empresa" class="input-theme w-full px-3 py-2 rounded text-sm">
+                    <input type="text" id="client-cnpj" placeholder="CNPJ / CPF" class="input-theme w-full px-3 py-2 rounded text-sm">
                 </div>
             </div>
         </div>
 
-        <!-- Rodapé Carrinho -->
-        <div class="p-6 bg-darker border-t border-white/10">
-            <div class="flex justify-between text-silver mb-2 text-sm">
+        <div class="p-6 theme-bg-darker border-t theme-border">
+            <div class="flex justify-between theme-text-secondary mb-2 text-sm">
                 <span>Subtotal:</span>
-                <span id="cart-subtotal">R$ 0,00</span>
+                <span id="cart-subtotal" class="font-medium">R$ 0,00</span>
             </div>
-            <div class="flex justify-between text-silver mb-4 text-sm" id="frete-display-row">
+            <div class="flex justify-between theme-text-secondary mb-4 text-sm" id="frete-display-row">
                 <span>Frete Estimado:</span>
-                <span id="cart-frete">A calcular</span>
+                <span id="cart-frete" class="font-medium">A calcular</span>
             </div>
-            <div class="flex justify-between items-end mb-6">
-                <span class="text-white font-bold">Total:</span>
-                <span id="cart-final-total" class="font-bold text-2xl text-gold">R$ 0,00</span>
+            <div class="flex justify-between items-end mb-6 border-t theme-border border-dashed pt-4">
+                <span class="theme-text-primary font-bold">Total:</span>
+                <span id="cart-final-total" class="font-bold text-2xl text-[#D4AF37]">R$ 0,00</span>
             </div>
             <button onclick="finalizarPedido()" class="w-full btn-gold py-4 rounded font-bold text-center flex items-center justify-center gap-2">
                 <i class="fab fa-whatsapp text-xl"></i> Enviar Orçamento
@@ -261,30 +300,41 @@
         </div>
     </div>
 
-    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/80 z-[55] hidden backdrop-blur-sm transition-opacity"></div>
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 z-[55] hidden backdrop-blur-sm transition-opacity"></div>
 
     <!-- MENSAGEM FLUTUANTE -->
-    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gold text-darker px-6 py-3 rounded-full font-bold shadow-lg transition-transform duration-300 translate-y-20 z-[70] flex items-center gap-2">
-        <i class="fas fa-check-circle"></i> <span id="toast-msg">Mensagem</span>
+    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-[#D4AF37] text-[#121417] px-6 py-3 rounded-full font-bold shadow-2xl transition-transform duration-300 translate-y-24 z-[70] flex items-center gap-2">
+        <i id="toast-icon" class="fas fa-check-circle"></i> <span id="toast-msg">Mensagem</span>
     </div>
 
-    <!-- SCRIPT LOGIC -->
+    <!-- SCRIPT -->
     <script>
-        // --- CONSTANTES ---
         const API_JSON_URL = 'https://api.npoint.io/41aa4bf80479b83f68d7';
 
-        // --- ESTADO DA APLICAÇÃO ---
-        let bd = { produtos: [], amostras: [] };
+        let bd = { categorias: [], produtos: [], amostras: [] };
         let carrinho = [];
         let configAtual = { produto: null, loteIndex: -1, extrasSelecionados: {} };
         let valorFrete = 0;
         let cepDestino = "";
         let endDestino = {};
         let globalCarouselInterval = null;
+        let categoriaAtual = 'marmitas'; // default
 
         // --- INICIALIZAÇÃO ---
         async function init() {
+            // Verifica tema padrão (Dia = Default, mas respeita a escolha do sistema se quiser)
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                // Descomente a linha abaixo se quiser que force o escuro baseado no PC do usuário
+                // toggleTheme(); 
+            }
             await carregarDadosDoNpoint();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const icon = document.getElementById('theme-icon');
+            icon.className = isDark ? 'fas fa-sun text-yellow-400' : 'fas fa-moon';
         }
 
         async function carregarDadosDoNpoint() {
@@ -295,15 +345,21 @@
                 if(data && data.produtos) {
                     bd = data;
                     document.getElementById('loading-indicator').classList.add('hidden');
-                    document.getElementById('products-grid').classList.remove('hidden');
-                    document.getElementById('samples-section').classList.remove('hidden');
-                    renderizarCatalogo();
+                    document.getElementById('app-content').classList.remove('hidden');
+                    
+                    // Se o JSON novo não tiver categorias (preventivo), nós simulamos a antiga
+                    if(!bd.categorias) {
+                        bd.categorias = [{ id: "marmitas", nome: "Marmitas Anti-Vazamento", ativo: true, icone: "fas fa-box" }];
+                        bd.produtos.forEach(p => p.categoria_id = "marmitas");
+                    }
+
+                    renderizarInterface();
                 } else {
-                    throw new Error("JSON inválido ou vazio");
+                    throw new Error("JSON inválido");
                 }
             } catch (error) {
                 console.error("Erro ao carregar os dados:", error);
-                document.getElementById('loading-indicator').innerHTML = `<p class="text-red-400">Erro ao carregar o catálogo. Recarregue a página.</p>`;
+                document.getElementById('loading-indicator').innerHTML = `<p class="text-red-500 font-bold"><i class="fas fa-exclamation-triangle"></i> Falha ao carregar catálogo. Atualize a página.</p>`;
             }
         }
 
@@ -311,62 +367,86 @@
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
+        // --- RENDERIZAÇÃO DA INTERFACE ---
+        function renderizarInterface() {
+            renderCategorias();
+            renderizarCatalogo();
+            renderAmostras();
+        }
+
+        function renderCategorias() {
+            const grid = document.getElementById('categories-grid');
+            grid.innerHTML = bd.categorias.map(cat => {
+                const isActive = cat.id === categoriaAtual;
+                const filterStyle = isActive ? 'ring-2 ring-[#D4AF37] ring-offset-2 ring-offset-[var(--bg-body)] scale-[1.02]' : 'opacity-90 grayscale-[20%] hover:grayscale-0';
+                
+                return `
+                <div onclick="selecionarCategoria('${cat.id}', ${cat.ativo}, '${cat.nome}')" class="rounded-xl p-4 cursor-pointer transition-all duration-300 relative overflow-hidden group shadow-md ${filterStyle}" style="background: var(--gold-gradient); color: white;">
+                    ${!cat.ativo ? '<div class="absolute inset-0 bg-black/50 backdrop-blur-[1.5px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-300"><span class="bg-black text-white text-[10px] font-bold px-2 py-1 rounded uppercase shadow-lg">Em Construção</span></div>' : ''}
+                    <i class="${cat.icone} text-2xl mb-3 opacity-95 relative z-0"></i>
+                    <h4 class="font-bold text-sm mb-1 leading-tight relative z-0">${cat.nome}</h4>
+                    <p class="text-[10px] opacity-80 leading-tight relative z-0 hidden sm:block">${cat.descricao}</p>
+                </div>
+            `}).join('');
+        }
+
+        function selecionarCategoria(id, ativo, nome) {
+            if (!ativo) {
+                mostrarToast(`A linha de ${nome} está em construção. Em breve!`, true);
+                return;
+            }
+            categoriaAtual = id;
+            document.getElementById('category-title').innerText = nome;
+            renderCategorias();
+            renderizarCatalogo();
+        }
+
         function renderizarCatalogo() {
             const grid = document.getElementById('products-grid');
+            const emptyState = document.getElementById('empty-products');
             
-            grid.innerHTML = bd.produtos.map(p => {
-                // Nova lógica: Procura matematicamente a quantidade mínima em todos os lotes
+            const produtosFiltrados = bd.produtos.filter(p => p.categoria_id === categoriaAtual);
+
+            if (produtosFiltrados.length === 0) {
+                grid.innerHTML = '';
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = produtosFiltrados.map(p => {
+                // Lógica da Quantidade mínima automática
                 const qtdBase = p.lotes && p.lotes.length > 0 ? Math.min(...p.lotes.map(lote => lote.qtd)) : 0;
                 
-                // Lógica para renderizar múltiplas imagens num carrossel
                 let imagensHTML = '';
                 if (p.imagens && p.imagens.length > 0) {
                     imagensHTML = p.imagens.map((img, i) => `
-                        <img src="${img}" alt="Foto de ${p.nome}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-70 group-hover:opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'">
+                        <img src="${img}" alt="Foto de ${p.nome}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-80 group-hover:opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto'">
                     `).join('');
                 } else {
-                    imagensHTML = `<img src="https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto" class="w-full h-full object-cover opacity-70">`;
+                    imagensHTML = `<img src="https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto" class="w-full h-full object-cover opacity-70">`;
                 }
 
                 return `
-                <div class="bg-card rounded-xl border border-white/5 card-hover cursor-pointer overflow-hidden flex flex-col group" onclick="abrirModalProduto('${p.id}')">
-                    <div class="h-48 w-full relative bg-darker carousel-container">
+                <div class="theme-bg-card rounded-xl border theme-border card-hover cursor-pointer overflow-hidden flex flex-col group shadow-sm" onclick="abrirModalProduto('${p.id}')">
+                    <div class="h-48 w-full relative theme-bg-darker carousel-container">
                         ${imagensHTML}
-                        <div class="absolute top-3 right-3 bg-darker/90 backdrop-blur text-gold text-[10px] px-2 py-1 rounded border border-gold/30 font-bold uppercase tracking-wider shadow-lg z-10">
+                        <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-[#D4AF37] text-[10px] px-2 py-1 rounded border border-[#D4AF37]/30 font-bold uppercase tracking-wider shadow-lg z-10">
                             A partir de ${qtdBase} un
                         </div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col relative z-10">
                         <div class="flex items-center gap-3 mb-2">
-                            <i class="fas ${p.icone} text-gold"></i>
-                            <h3 class="font-serif font-bold text-xl text-white leading-tight">${p.nome}</h3>
+                            <i class="fas ${p.icone} text-[#D4AF37] text-lg"></i>
+                            <h3 class="font-serif font-bold text-xl theme-text-primary leading-tight">${p.nome}</h3>
                         </div>
-                        <p class="text-sm text-silver line-clamp-3 mb-4 flex-1">${p.descricao}</p>
-                        <div class="flex justify-between items-center text-gold font-medium text-sm mt-auto border-t border-white/5 pt-4">
+                        <p class="text-sm theme-text-secondary line-clamp-3 mb-4 flex-1">${p.descricao}</p>
+                        <div class="flex justify-between items-center text-[#D4AF37] font-medium text-sm mt-auto border-t theme-border pt-4 border-dashed">
                             <span>Configurar Lote</span> 
-                            <i class="fas fa-arrow-right text-xs"></i>
-                        </div>
-                    </div>
-                </div>
-            `}).join('');
-
-            const samplesGrid = document.getElementById('samples-grid');
-            samplesGrid.innerHTML = bd.amostras.map(a => {
-                let imgAmostra = (a.imagens && a.imagens.length > 0) ? a.imagens[0] : '';
-                return `
-                <div class="bg-card border border-dashed border-white/20 rounded-xl overflow-hidden flex flex-col">
-                    <div class="h-28 w-full relative bg-darker flex items-center justify-center overflow-hidden">
-                        <img src="${imgAmostra}" alt="${a.nome}" class="w-full h-full object-cover opacity-50 blur-[2px]" onerror="this.style.display='none'">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <i class="fas ${a.icone} text-3xl text-gold drop-shadow-md"></i>
-                        </div>
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col">
-                        <h4 class="font-bold text-white mb-2">${a.nome}</h4>
-                        <p class="text-xs text-silver mb-4 flex-1">${a.descricao}</p>
-                        <div class="flex justify-between items-center mt-auto pt-3 border-t border-white/5">
-                            <span class="font-bold text-gold">${formatarMoeda(a.preco)}</span>
-                            <button onclick="adicionarAmostra('${a.id}')" class="btn-outline-gold px-3 py-1 text-xs rounded font-bold">Adicionar</button>
+                            <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
                         </div>
                     </div>
                 </div>
@@ -375,6 +455,62 @@
             iniciarCarrosseis();
         }
 
+        function renderAmostras() {
+            const grid = document.getElementById('samples-grid');
+            if(!bd.amostras || bd.amostras.length === 0) {
+                document.getElementById('samples-section').classList.add('hidden');
+                return;
+            }
+
+            grid.innerHTML = bd.amostras.map(a => {
+                let imgAmostra = (a.imagens && a.imagens.length > 0) ? a.imagens[0] : '';
+                return `
+                <div class="theme-bg-card border border-dashed theme-border rounded-xl overflow-hidden flex flex-col shadow-sm">
+                    <div class="h-28 w-full relative theme-bg-darker flex items-center justify-center overflow-hidden">
+                        <img src="${imgAmostra}" alt="${a.nome}" class="w-full h-full object-cover opacity-50 blur-[2px]" onerror="this.style.display='none'">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas ${a.icone} text-3xl text-[#D4AF37] drop-shadow-md"></i>
+                        </div>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h4 class="font-bold theme-text-primary mb-2">${a.nome}</h4>
+                        <p class="text-xs theme-text-secondary mb-4 flex-1">${a.descricao}</p>
+                        <div class="flex justify-between items-center mt-auto pt-3 border-t theme-border">
+                            <span class="font-bold text-[#D4AF37]">${formatarMoeda(a.preco)}</span>
+                            <button onclick="adicionarAmostra('${a.id}')" class="btn-outline-gold px-3 py-1 text-xs rounded font-bold">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // --- SISTEMA DE CARROSSEL ---
+        function iniciarCarrosseis() {
+            if (globalCarouselInterval) clearInterval(globalCarouselInterval);
+            globalCarouselInterval = setInterval(() => {
+                document.querySelectorAll('.carousel-container').forEach(container => {
+                    const imagens = container.querySelectorAll('.carousel-img');
+                    if (imagens.length <= 1) return;
+                    
+                    let indiceAtual = Array.from(imagens).findIndex(img => img.classList.contains('opacity-80') || img.classList.contains('opacity-100') || img.classList.contains('group-hover:opacity-100'));
+                    if (indiceAtual === -1) indiceAtual = 0;
+                    
+                    imagens[indiceAtual].classList.remove('opacity-80', 'opacity-100', 'group-hover:opacity-100');
+                    imagens[indiceAtual].classList.add('opacity-0');
+                    
+                    const proximoIndice = (indiceAtual + 1) % imagens.length;
+                    imagens[proximoIndice].classList.remove('opacity-0');
+                    
+                    if (container.id === 'pm-img-container') {
+                        imagens[proximoIndice].classList.add('opacity-100');
+                    } else {
+                        imagens[proximoIndice].classList.add('opacity-80', 'group-hover:opacity-100');
+                    }
+                });
+            }, 3000);
+        }
+
+        // --- LÓGICA DE PRODUTOS / MODAL ---
         function abrirModalProduto(id) {
             const produto = bd.produtos.find(p => p.id === id);
             if(!produto) return;
@@ -384,45 +520,40 @@
             document.getElementById('pm-title').innerText = produto.nome;
             document.getElementById('pm-desc').innerText = produto.descricao;
 
-            // Renderizar Imagens no Modal
             const imgContainer = document.getElementById('pm-img-container');
             if (produto.imagens && produto.imagens.length > 0) {
                 let imgsHTML = produto.imagens.map((img, i) => `
-                    <img src="${img}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-80' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'">
+                    <img src="${img}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto'">
                 `).join('');
-                
-                // Adiciona um degradê por cima para não atrapalhar a leitura se a tela for pequena
-                imgContainer.innerHTML = imgsHTML + '<div class="absolute inset-0 bg-gradient-to-t from-card to-transparent z-10"></div>';
+                imgContainer.innerHTML = imgsHTML + '<div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent opacity-80 z-10"></div>';
                 imgContainer.classList.remove('hidden');
             } else {
                 imgContainer.classList.add('hidden');
             }
 
-            // Renderizar Lotes
             const divLotes = document.getElementById('pm-lots');
             divLotes.innerHTML = produto.lotes.map((lote, index) => `
-                <button onclick="selecionarLote(${index})" id="btn-lote-${index}" class="btn-lote text-left p-3 rounded-lg border border-white/10 bg-dark hover:border-gold/50 transition relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition"></div>
+                <button onclick="selecionarLote(${index})" id="btn-lote-${index}" class="btn-lote text-left p-3 rounded-lg border theme-border theme-bg-darker hover:border-[#D4AF37]/50 transition relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-[#D4AF37]/10 opacity-0 group-hover:opacity-100 transition"></div>
                     <div class="relative z-10">
-                        <span class="block font-bold text-white text-sm">${lote.qtd} un</span>
-                        <span class="block text-gold text-xs font-medium mb-1">${formatarMoeda(lote.precoUn)} / un</span>
-                        <span class="block text-[9px] text-silver leading-tight">${lote.desc}</span>
+                        <span class="block font-bold theme-text-primary text-sm">${lote.qtd} un</span>
+                        <span class="block text-[#D4AF37] text-xs font-medium mb-1">${formatarMoeda(lote.precoUn)} / un</span>
+                        <span class="block text-[9px] theme-text-secondary leading-tight">${lote.desc}</span>
                     </div>
                 </button>
             `).join('');
 
-            // Renderizar Extras
             const contExtras = document.getElementById('pm-extras-container');
             const divExtras = document.getElementById('pm-extras');
             if(produto.extras && produto.extras.length > 0) {
                 contExtras.classList.remove('hidden');
                 divExtras.innerHTML = produto.extras.map((ex, index) => `
-                    <label class="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-dark cursor-pointer hover:bg-white/5 transition">
+                    <label class="flex items-center justify-between p-3 rounded-lg border theme-border theme-bg-darker cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition">
                         <div class="flex items-center gap-3">
-                            <input type="checkbox" onchange="toggleExtra('${ex.id}', this.checked)" class="w-4 h-4 accent-gold bg-dark border-white/20 rounded">
-                            <span class="text-sm text-silver">${ex.nome}</span>
+                            <input type="checkbox" onchange="toggleExtra('${ex.id}', this.checked)" class="w-4 h-4 accent-[#D4AF37] rounded">
+                            <span class="text-sm theme-text-primary">${ex.nome}</span>
                         </div>
-                        <span class="text-xs text-gold font-medium">+ ${formatarMoeda(ex.precoAdd)}/un</span>
+                        <span class="text-xs text-[#D4AF37] font-medium">+ ${formatarMoeda(ex.precoAdd)}/un</span>
                     </label>
                 `).join('');
             } else {
@@ -439,72 +570,37 @@
             document.getElementById('product-modal').classList.remove('flex');
         }
 
-        // --- SISTEMA DE CARROSSEL ---
-        function iniciarCarrosseis() {
-            if (globalCarouselInterval) clearInterval(globalCarouselInterval);
-            globalCarouselInterval = setInterval(() => {
-                document.querySelectorAll('.carousel-container').forEach(container => {
-                    const imagens = container.querySelectorAll('.carousel-img');
-                    if (imagens.length <= 1) return; // Se só tiver uma imagem, não faz slide
-                    
-                    // Encontra a imagem atual visível
-                    let indiceAtual = Array.from(imagens).findIndex(img => img.classList.contains('opacity-80') || img.classList.contains('opacity-100') || img.classList.contains('group-hover:opacity-100'));
-                    if (indiceAtual === -1) indiceAtual = 0;
-                    
-                    // Esconde a atual
-                    imagens[indiceAtual].classList.remove('opacity-80', 'opacity-100', 'group-hover:opacity-100');
-                    imagens[indiceAtual].classList.add('opacity-0');
-                    
-                    // Mostra a próxima
-                    const proximoIndice = (indiceAtual + 1) % imagens.length;
-                    imagens[proximoIndice].classList.remove('opacity-0');
-                    // Mantém a lógica de opacidade diferente para modal vs vitrine
-                    if (container.id === 'pm-img-container') {
-                        imagens[proximoIndice].classList.add('opacity-80');
-                    } else {
-                        imagens[proximoIndice].classList.add('opacity-70', 'group-hover:opacity-100');
-                    }
-                });
-            }, 3000); // Passa a imagem a cada 3 segundos
-        }
-
         function selecionarLote(index) {
             configAtual.loteIndex = index;
             document.querySelectorAll('.btn-lote').forEach((btn, i) => {
                 if(i === index) {
-                    btn.classList.add('border-gold', 'bg-gold/5');
-                    btn.classList.remove('border-white/10', 'bg-dark');
+                    btn.classList.add('border-[#D4AF37]', 'bg-[#D4AF37]/5');
+                    btn.classList.remove('theme-border', 'theme-bg-darker');
                 } else {
-                    btn.classList.remove('border-gold', 'bg-gold/5');
-                    btn.classList.add('border-white/10', 'bg-dark');
+                    btn.classList.remove('border-[#D4AF37]', 'bg-[#D4AF37]/5');
+                    btn.classList.add('theme-border', 'theme-bg-darker');
                 }
             });
             calcularTotalModal();
         }
 
         function toggleExtra(extraId, isChecked) {
-            if(isChecked) {
-                configAtual.extrasSelecionados[extraId] = true;
-            } else {
-                delete configAtual.extrasSelecionados[extraId];
-            }
+            if(isChecked) configAtual.extrasSelecionados[extraId] = true;
+            else delete configAtual.extrasSelecionados[extraId];
             calcularTotalModal();
         }
 
         function calcularTotalModal() {
             const lote = configAtual.produto.lotes[configAtual.loteIndex];
-            let precoUnitarioBase = lote.precoUn;
             let precoAdicionaisUn = 0;
 
             if(configAtual.produto.extras) {
                 configAtual.produto.extras.forEach(ex => {
-                    if(configAtual.extrasSelecionados[ex.id]) {
-                        precoAdicionaisUn += ex.precoAdd;
-                    }
+                    if(configAtual.extrasSelecionados[ex.id]) precoAdicionaisUn += ex.precoAdd;
                 });
             }
 
-            const precoUnitarioFinal = precoUnitarioBase + precoAdicionaisUn;
+            const precoUnitarioFinal = lote.precoUn + precoAdicionaisUn;
             const valorLoteTotal = precoUnitarioFinal * lote.qtd;
 
             document.getElementById('pm-total').innerText = formatarMoeda(valorLoteTotal);
@@ -528,15 +624,13 @@
             }
 
             const precoUnitarioFinal = lote.precoUn + precoAdicionaisUn;
-            const valorTotal = precoUnitarioFinal * lote.qtd;
-
             const item = {
                 tipo: 'lote',
                 nome: `Lote ${lote.qtd} un - ${prod.nome}`,
                 desc: `${lote.desc}${extrasNome.length > 0 ? ' | Opcionais: ' + extrasNome.join(', ') : ''}`,
                 qtdItens: lote.qtd,
                 precoUn: precoUnitarioFinal,
-                valorTotal: valorTotal
+                valorTotal: precoUnitarioFinal * lote.qtd
             };
 
             carrinho.push(item);
@@ -544,19 +638,12 @@
             atualizarCarrinho();
             mostrarToast("Lote adicionado ao orçamento!");
             
-            if (document.getElementById('cep-input').value.length >= 8) {
-                calcularFrete();
-            }
+            if (document.getElementById('cep-input').value.length >= 8) calcularFrete();
         }
 
         function adicionarAmostra(id) {
             const amostra = bd.amostras.find(a => a.id === id);
-            carrinho.push({
-                tipo: 'amostra',
-                nome: amostra.nome,
-                desc: 'Item único',
-                valorTotal: amostra.preco
-            });
+            carrinho.push({ tipo: 'amostra', nome: amostra.nome, desc: 'Item único', valorTotal: amostra.preco });
             atualizarCarrinho();
             mostrarToast("Item adicionado ao orçamento!");
         }
@@ -564,13 +651,8 @@
         function removerItem(index) {
             carrinho.splice(index, 1);
             atualizarCarrinho();
-            if (carrinho.length > 0 && document.getElementById('cep-input').value.length >= 8) {
-                calcularFrete();
-            } else if (carrinho.length === 0) {
-                valorFrete = 0;
-                document.getElementById('cart-frete').innerText = "A calcular";
-                calcularTotais();
-            }
+            if (carrinho.length > 0 && document.getElementById('cep-input').value.length >= 8) calcularFrete();
+            else if (carrinho.length === 0) { valorFrete = 0; document.getElementById('cart-frete').innerText = "A calcular"; document.getElementById('cart-frete').classList.remove('theme-text-primary'); calcularTotais(); }
         }
 
         function atualizarCarrinho() {
@@ -578,7 +660,7 @@
             const badge = document.getElementById('cart-badge');
             
             if(carrinho.length === 0) {
-                divItems.innerHTML = '<p class="text-silver text-center text-sm py-10">Seu orçamento está vazio.</p>';
+                divItems.innerHTML = '<p class="theme-text-secondary text-center text-sm py-10">Seu orçamento está vazio.</p>';
                 badge.classList.add('hidden');
                 document.getElementById('cart-subtotal').innerText = "R$ 0,00";
             } else {
@@ -586,41 +668,33 @@
                 badge.classList.remove('hidden');
                 
                 divItems.innerHTML = carrinho.map((item, index) => `
-                    <div class="bg-dark p-3 rounded-lg border border-white/5 flex justify-between items-start">
+                    <div class="theme-bg-darker p-3 rounded-lg border theme-border flex justify-between items-start shadow-sm">
                         <div class="pr-3">
-                            <h5 class="text-white text-sm font-bold mb-1">${item.nome}</h5>
-                            <p class="text-[10px] text-silver leading-tight">${item.desc}</p>
-                            ${item.tipo === 'lote' ? `<p class="text-[10px] text-gold mt-1">Ref: ${formatarMoeda(item.precoUn)} / cx</p>` : ''}
+                            <h5 class="theme-text-primary text-sm font-bold mb-1">${item.nome}</h5>
+                            <p class="text-[10px] theme-text-secondary leading-tight">${item.desc}</p>
+                            ${item.tipo === 'lote' ? `<p class="text-[10px] text-[#D4AF37] mt-1">Ref: ${formatarMoeda(item.precoUn)} / cx</p>` : ''}
                         </div>
                         <div class="text-right">
-                            <p class="text-white font-bold text-sm whitespace-nowrap mb-2">${formatarMoeda(item.valorTotal)}</p>
-                            <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs"><i class="fas fa-trash"></i> Remover</button>
+                            <p class="theme-text-primary font-bold text-sm whitespace-nowrap mb-2">${formatarMoeda(item.valorTotal)}</p>
+                            <button onclick="removerItem(${index})" class="text-red-500 hover:text-red-700 text-xs transition"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `).join('');
             }
-
             calcularTotais();
         }
 
         function calcularTotais() {
             let subtotal = carrinho.reduce((acc, item) => acc + item.valorTotal, 0);
             document.getElementById('cart-subtotal').innerText = formatarMoeda(subtotal);
-            
-            let totalFinal = subtotal + valorFrete;
-            document.getElementById('cart-final-total').innerText = formatarMoeda(totalFinal);
+            document.getElementById('cart-final-total').innerText = formatarMoeda(subtotal + valorFrete);
         }
 
         function toggleCart() {
             const drawer = document.getElementById('cart-drawer');
             const overlay = document.getElementById('overlay');
-            if(drawer.classList.contains('translate-x-full')) {
-                drawer.classList.remove('translate-x-full');
-                overlay.classList.remove('hidden');
-            } else {
-                drawer.classList.add('translate-x-full');
-                overlay.classList.add('hidden');
-            }
+            drawer.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
         }
 
         function mascaraCEP(input) {
@@ -635,75 +709,44 @@
             const btnCalc = document.getElementById('btn-calc-frete');
 
             if(cepInput.length !== 8) {
-                resultDiv.innerText = "Digite um CEP válido com 8 dígitos.";
-                resultDiv.className = "text-xs text-red-400 mt-2 block";
-                return;
+                resultDiv.innerText = "Digite um CEP válido com 8 dígitos."; resultDiv.className = "text-xs text-red-500 mt-2 block"; return;
             }
-
             if(carrinho.length === 0) {
-                resultDiv.innerText = "Adicione itens ao orçamento primeiro.";
-                resultDiv.className = "text-xs text-red-400 mt-2 block";
-                return;
+                resultDiv.innerText = "Adicione itens primeiro."; resultDiv.className = "text-xs text-red-500 mt-2 block"; return;
             }
 
-            btnCalc.innerHTML = '<div class="loader"></div>';
-            btnCalc.disabled = true;
+            btnCalc.innerHTML = '<div class="loader mx-auto"></div>'; btnCalc.disabled = true;
 
             try {
                 const response = await fetch(`https://viacep.com.br/ws/${cepInput}/json/`);
                 const data = await response.json();
-
-                if(data.erro) { throw new Error("CEP não encontrado"); }
+                if(data.erro) throw new Error("CEP não encontrado");
 
                 endDestino = data;
-                const uf = data.uf;
-                
                 let totalUnidades = carrinho.reduce((acc, item) => item.tipo === 'lote' ? acc + item.qtdItens : acc, 0);
                 
-                let tarifaBase = 0;
-                let taxaPorUnidade = 0;
-                
-                const regiaoSul = ['RS', 'SC', 'PR'];
-                const regiaoSE_CO = ['SP', 'RJ', 'MG', 'ES', 'MS', 'MT', 'GO', 'DF'];
-                const regiaoNE = ['BA', 'SE', 'AL', 'PE', 'PB', 'RN', 'CE', 'PI', 'MA'];
-                const regiaoN = ['AM', 'PA', 'AC', 'RR', 'RO', 'AP', 'TO'];
+                let tarifaBase = 0; let taxaPorUnidade = 0;
+                const regS = ['RS', 'SC', 'PR'], regSE = ['SP', 'RJ', 'MG', 'ES', 'MS', 'MT', 'GO', 'DF'], regNE = ['BA', 'SE', 'AL', 'PE', 'PB', 'RN', 'CE', 'PI', 'MA'];
 
-                if(uf === 'RS') { 
-                    tarifaBase = 20.00; taxaPorUnidade = 0.10; 
-                }
-                else if(regiaoSul.includes(uf)) { 
-                    tarifaBase = 25.00; taxaPorUnidade = 0.12; 
-                }
-                else if(regiaoSE_CO.includes(uf)) { 
-                    tarifaBase = 32.50; taxaPorUnidade = 0.175; 
-                }
-                else if(regiaoNE.includes(uf)) { 
-                    tarifaBase = 50.00; taxaPorUnidade = 0.25; 
-                }
-                else if(regiaoN.includes(uf)) { 
-                    tarifaBase = 70.00; taxaPorUnidade = 0.30; 
-                }
+                if(data.uf === 'RS') { tarifaBase = 20.00; taxaPorUnidade = 0.10; }
+                else if(regS.includes(data.uf)) { tarifaBase = 25.00; taxaPorUnidade = 0.12; }
+                else if(regSE.includes(data.uf)) { tarifaBase = 32.50; taxaPorUnidade = 0.175; }
+                else if(regNE.includes(data.uf)) { tarifaBase = 50.00; taxaPorUnidade = 0.25; }
+                else { tarifaBase = 70.00; taxaPorUnidade = 0.30; }
 
                 valorFrete = tarifaBase + (totalUnidades * taxaPorUnidade);
                 cepDestino = `${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
                 
-                resultDiv.innerHTML = `<span class="text-green-400"><i class="fas fa-check-circle"></i> Envio via transportadora para ${data.localidade}/${data.uf}</span>`;
+                resultDiv.innerHTML = `<span class="text-green-600 dark:text-green-400 font-medium"><i class="fas fa-check-circle"></i> Envio p/ ${data.localidade}/${data.uf}</span>`;
                 resultDiv.className = "text-xs mt-2 block";
-                
                 document.getElementById('cart-frete').innerText = formatarMoeda(valorFrete);
-                document.getElementById('cart-frete').classList.add('text-white');
-                
+                document.getElementById('cart-frete').classList.add('theme-text-primary');
                 calcularTotais();
-
             } catch (error) {
-                resultDiv.innerText = "Erro ao calcular frete. Verifique o CEP.";
-                resultDiv.className = "text-xs text-red-400 mt-2 block";
-                valorFrete = 0;
-                document.getElementById('cart-frete').innerText = "A calcular";
-                calcularTotais();
+                resultDiv.innerText = "Erro ao calcular frete."; resultDiv.className = "text-xs text-red-500 mt-2 block";
+                valorFrete = 0; document.getElementById('cart-frete').innerText = "A calcular"; document.getElementById('cart-frete').classList.remove('theme-text-primary'); calcularTotais();
             } finally {
-                btnCalc.innerHTML = 'Calcular';
-                btnCalc.disabled = false;
+                btnCalc.innerHTML = 'Calcular'; btnCalc.disabled = false;
             }
         }
 
@@ -711,58 +754,43 @@
             const nome = document.getElementById('client-name').value;
             const cnpj = document.getElementById('client-cnpj').value;
 
-            if(carrinho.length === 0) {
-                return mostrarToast("Seu carrinho está vazio.");
-            }
-            if(!nome || !cnpj) {
-                return mostrarToast("Preencha Nome e CNPJ/CPF para contato.");
-            }
+            if(carrinho.length === 0) return mostrarToast("Seu carrinho está vazio.", true);
+            if(!nome || !cnpj) return mostrarToast("Preencha Nome e CNPJ/CPF.", true);
 
-            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*%0A`;
-            msg += `-----------------------------------%0A`;
-            msg += `👤 *Cliente:* ${nome}%0A`;
-            msg += `📄 *CNPJ/CPF:* ${cnpj}%0A`;
+            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*%0A-----------------------------------%0A👤 *Cliente:* ${nome}%0A📄 *CNPJ/CPF:* ${cnpj}%0A`;
+            if(cepDestino) msg += `📍 *Destino:* ${cepDestino}%0A`;
+            msg += `-----------------------------------%0A%0A*ITENS:*%0A`;
             
-            if(cepDestino) {
-                msg += `📍 *Destino:* ${cepDestino}%0A`;
-            }
-            msg += `-----------------------------------%0A%0A`;
-            
-            msg += `*ITENS SOLICITADOS:*%0A`;
             carrinho.forEach(item => {
-                msg += `📦 *${item.nome}*%0A`;
-                if(item.desc !== 'Item único') msg += `↳ _${item.desc}_%0A`;
-                msg += `💰 Valor: ${formatarMoeda(item.valorTotal)}%0A%0A`;
+                msg += `📦 *${item.nome}*%0A${item.desc !== 'Item único' ? `↳ _${item.desc}_%0A` : ''}💰 ${formatarMoeda(item.valorTotal)}%0A%0A`;
             });
 
             const subtotal = carrinho.reduce((acc, item) => acc + item.valorTotal, 0);
-            
-            msg += `-----------------------------------%0A`;
-            msg += `📊 *Subtotal:* ${formatarMoeda(subtotal)}%0A`;
-            if(valorFrete > 0) {
-                msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}%0A`;
-            }
-            msg += `💲 *TOTAL PREVISTO:* ${formatarMoeda(subtotal + valorFrete)}%0A`;
-            msg += `-----------------------------------%0A`;
-            msg += `_Orçamento gerado via Catálogo Online_`;
+            msg += `-----------------------------------%0A📊 *Subtotal:* ${formatarMoeda(subtotal)}%0A`;
+            if(valorFrete > 0) msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}%0A`;
+            msg += `💲 *TOTAL:* ${formatarMoeda(subtotal + valorFrete)}%0A-----------------------------------%0A_via Catálogo Online_`;
 
-            const numeroWhatsApp = "5551999999999"; 
-            const link = `https://wa.me/${numeroWhatsApp}?text=${msg}`;
-            
-            window.open(link, '_blank');
+            window.open(`https://wa.me/5551999999999?text=${msg}`, '_blank');
         }
 
-        function mostrarToast(mensagem) {
+        function mostrarToast(mensagem, isError = false) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = mensagem;
-            toast.classList.remove('translate-y-20');
             
-            setTimeout(() => {
-                toast.classList.add('translate-y-20');
-            }, 3000);
+            if(isError) {
+                toast.classList.remove('bg-[#D4AF37]', 'text-[#121417]');
+                toast.classList.add('bg-red-600', 'text-white');
+                document.getElementById('toast-icon').className = 'fas fa-exclamation-triangle';
+            } else {
+                toast.classList.add('bg-[#D4AF37]', 'text-[#121417]');
+                toast.classList.remove('bg-red-600', 'text-white');
+                document.getElementById('toast-icon').className = 'fas fa-check-circle';
+            }
+
+            toast.classList.remove('translate-y-24');
+            setTimeout(() => toast.classList.add('translate-y-24'), 4000);
         }
 
-        // Chama a inicialização ao carregar
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
