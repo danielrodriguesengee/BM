@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BM Embalagens Personalizadas | Orçamentos</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#1a1c20',
+                        darker: '#121417',
+                        card: '#24272c',
+                        gold: '#D4AF37',
+                        goldhover: '#B5952F',
+                        silver: '#C0C0C0'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #121417;
+            color: #f5f5f5;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1a1c20; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
+
+        .glass-header {
+            background: rgba(26, 28, 32, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA771C 100%);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-gold {
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            transition: all 0.3s;
+        }
+        .btn-outline-gold:hover, .btn-outline-gold.active {
+            background: rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .card-hover { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05); }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .input-dark {
+            background: #1a1c20;
+            border: 1px solid #333;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        .input-dark:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); }
+
+        .loader {
+            border: 3px solid rgba(212, 175, 55, 0.2);
+            border-top: 3px solid #D4AF37;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-sans antialiased custom-scrollbar">
+
+    <!-- HEADER -->
+    <header class="fixed top-0 w-full z-40 glass-header">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- Usando um ícone SVG simulando a logo para manter um arquivo só, mas esteticamente fiel -->
+                <div class="w-10 h-10 border-2 border-gold rounded flex items-center justify-center font-serif font-bold text-xl gold-gradient-text tracking-tighter">
+                    BM
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="font-serif font-bold text-lg leading-tight tracking-wide text-white">EMBALAGENS</h1>
+                    <p class="text-[9px] text-silver uppercase tracking-[0.2em]">Personalizadas Ltda.</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleCart()" class="relative text-gold hover:text-white transition p-2 flex items-center gap-2">
+                <span class="hidden sm:inline text-sm font-medium">Orçamento</span>
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="pt-28 pb-10 px-4 max-w-5xl mx-auto text-center">
+        <h2 class="font-serif text-3xl md:text-5xl font-bold mb-4">Sua marca <span class="gold-gradient-text">em destaque.</span></h2>
+        <p class="text-silver text-sm md:text-base max-w-2xl mx-auto mb-8">Embalagens premium anti vazamento, 100% seguras (livre de BPA) com laminação em PP. Perfeitas para ir ao micro-ondas, forno e freezer.</p>
+        
+        <div class="flex flex-wrap justify-center gap-4 text-xs font-medium">
+            <div class="bg-card px-4 py-2 rounded-full border border-white/5"><i class="fas fa-leaf text-green-500 mr-2"></i>Sustentável</div>
+            <div class="bg-card px-4 py-2 rounded-full border border-white/5"><i class="fas fa-fire text-red-400 mr-2"></i>Até 280°C</div>
+            <div class="bg-card px-4 py-2 rounded-full border border-white/5"><i class="fas fa-tint-slash text-blue-400 mr-2"></i>Zero Vazamento</div>
+        </div>
+    </section>
+
+    <!-- CATALOGO -->
+    <main class="max-w-5xl mx-auto px-4 pb-24">
+        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Renderizado via JS -->
+        </div>
+
+        <div class="mt-16 pt-8 border-t border-white/10 text-center">
+            <h3 class="font-serif text-2xl font-bold mb-6 text-white">Amostras e Provas</h3>
+            <div id="samples-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Renderizado via JS -->
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DO PRODUTO (CONFIGURADOR) -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-card w-full max-w-2xl rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-darker">
+                <h3 id="pm-title" class="font-serif font-bold text-xl gold-gradient-text">Nome do Produto</h3>
+                <button onclick="closeProductModal()" class="text-silver hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            </div>
+
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
+                <p id="pm-desc" class="text-sm text-silver mb-6"></p>
+                
+                <!-- Lotes -->
+                <div class="mb-6">
+                    <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">1. Escolha a Quantidade (Lote)</label>
+                    <div id="pm-lots" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <!-- Render via JS -->
+                    </div>
+                </div>
+
+                <!-- Adicionais -->
+                <div id="pm-extras-container" class="mb-6 hidden">
+                    <label class="block text-xs uppercase tracking-wider text-silver mb-3 font-bold">2. Acabamentos Adicionais (Valor por un.)</label>
+                    <div id="pm-extras" class="space-y-2">
+                        <!-- Render via JS -->
+                    </div>
+                </div>
+
+                <!-- Resumo -->
+                <div class="bg-darker p-4 rounded-lg border border-gold/20 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-silver">Valor Total do Lote:</p>
+                        <p id="pm-total" class="font-bold text-2xl text-gold">R$ 0,00</p>
+                        <p id="pm-unit-price" class="text-[10px] text-silver mt-1">Ref. R$ 0,00 / un</p>
+                    </div>
+                    <button onclick="addToCart()" class="btn-gold px-6 py-3 rounded font-bold shadow-lg flex items-center gap-2">
+                        Adicionar <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DRAWER DO CARRINHO & CHECKOUT -->
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-card border-l border-white/10 shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b border-white/10 flex justify-between items-center bg-darker">
+            <h2 class="font-serif font-bold text-xl gold-gradient-text">Seu Orçamento</h2>
+            <button onclick="toggleCart()" class="text-silver hover:text-white"><i class="fas fa-times text-xl"></i></button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-5">
+            <div id="cart-items" class="space-y-4 mb-8">
+                <!-- Itens do Carrinho -->
+            </div>
+
+            <!-- Calculo de Frete -->
+            <div class="bg-darker p-4 rounded-xl border border-white/5 mb-6">
+                <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-truck text-gold"></i> Cálculo de Frete</h4>
+                <p class="text-[10px] text-silver mb-3">Origem: Parobé - RS (CEP: 95630-000)</p>
+                <div class="flex gap-2 mb-2">
+                    <input type="text" id="cep-input" maxlength="9" placeholder="Digite seu CEP" class="input-dark w-full px-3 py-2 rounded text-sm" onkeyup="mascaraCEP(this)">
+                    <button onclick="calcularFrete()" class="btn-outline-gold px-4 rounded text-sm font-medium whitespace-nowrap" id="btn-calc-frete">Calcular</button>
+                </div>
+                <div id="frete-result" class="text-xs text-silver hidden"></div>
+            </div>
+
+            <!-- Dados do Cliente -->
+            <div class="bg-darker p-4 rounded-xl border border-white/5">
+                <h4 class="text-sm font-bold text-white mb-3">Dados para Contato</h4>
+                <div class="space-y-3">
+                    <input type="text" id="client-name" placeholder="Seu Nome / Empresa" class="input-dark w-full px-3 py-2 rounded text-sm">
+                    <input type="text" id="client-cnpj" placeholder="CNPJ / CPF" class="input-dark w-full px-3 py-2 rounded text-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé Carrinho -->
+        <div class="p-6 bg-darker border-t border-white/10">
+            <div class="flex justify-between text-silver mb-2 text-sm">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between text-silver mb-4 text-sm" id="frete-display-row">
+                <span>Frete Estimado:</span>
+                <span id="cart-frete">A calcular</span>
+            </div>
+            <div class="flex justify-between items-end mb-6">
+                <span class="text-white font-bold">Total:</span>
+                <span id="cart-final-total" class="font-bold text-2xl text-gold">R$ 0,00</span>
+            </div>
+            <button onclick="finalizarPedido()" class="w-full btn-gold py-4 rounded font-bold text-center flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i> Enviar Orçamento
+            </button>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/80 z-[55] hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- MENSAGEM FLUTUANTE -->
+    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-gold text-darker px-6 py-3 rounded-full font-bold shadow-lg transition-transform duration-300 translate-y-20 z-[70] flex items-center gap-2">
+        <i class="fas fa-check-circle"></i> <span id="toast-msg">Mensagem</span>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // --- DADOS DO CATÁLOGO (Baseado no PDF) ---
+        const bd = {
+            produtos: [
+                {
+                    id: 'mod-m',
+                    nome: 'Modelo M (15x19x5)',
+                    descricao: 'Capacidade 750g a 800g. Modelo padrão de mercado. Anti vazamento revestidas. Ideal para: comida brasileira, petiscos, lasanhas, carnes.',
+                    lotes: [
+                        { qtd: 500, precoUn: 3.50, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 1000, precoUn: 2.99, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 2000, precoUn: 2.70, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 3000, precoUn: 2.57, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 5000, precoUn: 2.47, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 10000, precoUn: 2.30, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 100, precoUn: 2.40, desc: 'Sem Impressão, C/ Divisórias' },
+                        { qtd: 100, precoUn: 1.99, desc: 'Sem Impressão, S/ Divisórias' }
+                    ],
+                    extras: [
+                        { id: 'lam-met', nome: 'Laminação no Metalizado', precoAdd: 0.20 }
+                    ],
+                    icone: 'fa-box-open'
+                },
+                {
+                    id: 'mod-g',
+                    nome: 'Modelo G (25x17x5)',
+                    descricao: 'Capacidade 900g a 1200g. Ideal para feijoadas completas, churrasco e porções maiores. Opção de divisórias verticais ou horizontais.',
+                    lotes: [
+                        { qtd: 500, precoUn: 3.85, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 1000, precoUn: 3.25, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 2000, precoUn: 3.10, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 3000, precoUn: 2.88, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 5000, precoUn: 2.78, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 10000, precoUn: 2.56, desc: 'Arte 4x0 + 3 Divisórias' },
+                        { qtd: 100, precoUn: 2.50, desc: 'Sem Impressão, C/ Divisórias' },
+                        { qtd: 100, precoUn: 1.85, desc: 'Sem Impressão, S/ Divisórias' }
+                    ],
+                    extras: [
+                        { id: 'lam-met-g', nome: 'Laminação no Metalizado (Caixa)', precoAdd: 0.20 },
+                        { id: 'lam-berco', nome: 'Laminação Metalizada (Por Berço/Divisória)', precoAdd: 0.05 }
+                    ],
+                    icone: 'fa-box'
+                },
+                {
+                    id: 'mod-p',
+                    nome: 'Modelo P (10x15x5)',
+                    descricao: 'Suporta até 450g. Este modelo não tem caixas internas, apenas separador de ambientes.',
+                    lotes: [
+                        { qtd: 500, precoUn: 2.40, desc: 'Arte Padrão + Separador' },
+                        { qtd: 1000, precoUn: 2.20, desc: 'Arte Padrão + Separador' },
+                        { qtd: 3000, precoUn: 1.65, desc: 'Arte Padrão + Separador' },
+                        { qtd: 6000, precoUn: 1.30, desc: 'Arte Padrão + Separador' },
+                        { qtd: 10000, precoUn: 1.25, desc: 'Arte Padrão + Separador' }
+                    ],
+                    extras: [
+                        { id: 'lam-met-p', nome: 'Laminação no Metalizado', precoAdd: 0.20 }
+                    ],
+                    icone: 'fa-cube'
+                },
+                {
+                    id: 'mod-g1',
+                    nome: 'Modelo G1 (27x17x7)',
+                    descricao: 'Capacidade 1100g a 1600g. O maior da linha. Para churrasco, carnes grandes e refeições em família.',
+                    lotes: [
+                        { qtd: 250, precoUn: 5.90, desc: 'Arte 2x0 + 3 Bandejas' },
+                        { qtd: 500, precoUn: 4.85, desc: 'Arte 3x0 + 3 Bandejas' },
+                        { qtd: 1000, precoUn: 3.89, desc: 'Arte 4x0 + 3 Bandejas' },
+                        { qtd: 100, precoUn: 3.75, desc: 'Branca ou Kraft (S/ Personalização)' }
+                    ],
+                    extras: [
+                        { id: 'lam-met-g1', nome: 'Laminação Metalizada (Caixa)', precoAdd: 0.20 },
+                        { id: 'lam-berco-g1', nome: 'Laminação Metalizada (Caixa Interna)', precoAdd: 0.08 }
+                    ],
+                    icone: 'fa-boxes'
+                }
+            ],
+            amostras: [
+                {
+                    id: 'amostra-padrao',
+                    nome: 'Kit Amostras Físicas',
+                    descricao: 'Enviada em fase final para avaliação física. Valor devolvido em crédito no fechamento do pedido.',
+                    preco: 75.00,
+                    icone: 'fa-search'
+                },
+                {
+                    id: 'amostra-digital',
+                    nome: 'Provas Físicas c/ Sua Marca (5 un)',
+                    descricao: '5 unidades impressas com sua marca para fotos e preparação de cardápio antes do lote oficial.',
+                    preco: 150.00,
+                    icone: 'fa-camera'
+                }
+            ]
+        };
+
+        // --- ESTADO DA APLICAÇÃO ---
+        let carrinho = [];
+        let configAtual = { produto: null, loteIndex: -1, extrasSelecionados: {} };
+        let valorFrete = 0;
+        let cepDestino = "";
+        let endDestino = {};
+
+        // --- INICIALIZAÇÃO ---
+        function init() {
+            renderizarCatalogo();
+        }
+
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function renderizarCatalogo() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = bd.produtos.map(p => `
+                <div class="bg-card rounded-xl p-6 card-hover cursor-pointer" onclick="abrirModalProduto('${p.id}')">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded bg-dark flex items-center justify-center text-gold border border-white/5">
+                            <i class="fas ${p.icone} text-2xl"></i>
+                        </div>
+                        <span class="bg-white/5 text-silver text-[10px] px-2 py-1 rounded font-medium uppercase tracking-wider">Lotes a partir de ${p.lotes[p.lotes.length-1].qtd} un</span>
+                    </div>
+                    <h3 class="font-serif font-bold text-xl text-white mb-2">${p.nome}</h3>
+                    <p class="text-sm text-silver line-clamp-2 mb-4">${p.descricao}</p>
+                    <div class="flex items-center text-gold font-medium text-sm gap-2">
+                        <span>Configurar Lote</span> <i class="fas fa-arrow-right text-xs"></i>
+                    </div>
+                </div>
+            `).join('');
+
+            const samplesGrid = document.getElementById('samples-grid');
+            samplesGrid.innerHTML = bd.amostras.map(a => `
+                <div class="bg-card border border-dashed border-white/20 rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="w-10 h-10 rounded-full bg-dark flex items-center justify-center text-silver mx-auto mb-3">
+                            <i class="fas ${a.icone}"></i>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">${a.nome}</h4>
+                        <p class="text-xs text-silver mb-4">${a.descricao}</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-auto pt-4 border-t border-white/5">
+                        <span class="font-bold text-gold">${formatarMoeda(a.preco)}</span>
+                        <button onclick="adicionarAmostra('${a.id}')" class="btn-outline-gold px-3 py-1 text-xs rounded font-bold">Adicionar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- MODAL DE PRODUTO (CONFIGURADOR B2B) ---
+        function abrirModalProduto(id) {
+            const produto = bd.produtos.find(p => p.id === id);
+            if(!produto) return;
+
+            configAtual = { produto: produto, loteIndex: 0, extrasSelecionados: {} };
+            
+            document.getElementById('pm-title').innerText = produto.nome;
+            document.getElementById('pm-desc').innerText = produto.descricao;
+
+            // Renderizar Lotes
+            const divLotes = document.getElementById('pm-lots');
+            divLotes.innerHTML = produto.lotes.map((lote, index) => `
+                <button onclick="selecionarLote(${index})" id="btn-lote-${index}" class="btn-lote text-left p-3 rounded-lg border border-white/10 bg-dark hover:border-gold/50 transition relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition"></div>
+                    <div class="relative z-10">
+                        <span class="block font-bold text-white text-sm">${lote.qtd} un</span>
+                        <span class="block text-gold text-xs font-medium mb-1">${formatarMoeda(lote.precoUn)} / un</span>
+                        <span class="block text-[9px] text-silver leading-tight">${lote.desc}</span>
+                    </div>
+                </button>
+            `).join('');
+
+            // Renderizar Extras se houver
+            const contExtras = document.getElementById('pm-extras-container');
+            const divExtras = document.getElementById('pm-extras');
+            if(produto.extras && produto.extras.length > 0) {
+                contExtras.classList.remove('hidden');
+                divExtras.innerHTML = produto.extras.map((ex, index) => `
+                    <label class="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-dark cursor-pointer hover:bg-white/5 transition">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" onchange="toggleExtra('${ex.id}', this.checked)" class="w-4 h-4 accent-gold bg-dark border-white/20 rounded">
+                            <span class="text-sm text-silver">${ex.nome}</span>
+                        </div>
+                        <span class="text-xs text-gold font-medium">+ ${formatarMoeda(ex.precoAdd)}/un</span>
+                    </label>
+                `).join('');
+            } else {
+                contExtras.classList.add('hidden');
+            }
+
+            selecionarLote(0); // Seleciona o primeiro por padrão
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.getElementById('product-modal').classList.add('flex');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            document.getElementById('product-modal').classList.remove('flex');
+        }
+
+        function selecionarLote(index) {
+            configAtual.loteIndex = index;
+            document.querySelectorAll('.btn-lote').forEach((btn, i) => {
+                if(i === index) {
+                    btn.classList.add('border-gold', 'bg-gold/5');
+                    btn.classList.remove('border-white/10', 'bg-dark');
+                } else {
+                    btn.classList.remove('border-gold', 'bg-gold/5');
+                    btn.classList.add('border-white/10', 'bg-dark');
+                }
+            });
+            calcularTotalModal();
+        }
+
+        function toggleExtra(extraId, isChecked) {
+            if(isChecked) {
+                configAtual.extrasSelecionados[extraId] = true;
+            } else {
+                delete configAtual.extrasSelecionados[extraId];
+            }
+            calcularTotalModal();
+        }
+
+        function calcularTotalModal() {
+            const lote = configAtual.produto.lotes[configAtual.loteIndex];
+            let precoUnitarioBase = lote.precoUn;
+            let precoAdicionaisUn = 0;
+
+            if(configAtual.produto.extras) {
+                configAtual.produto.extras.forEach(ex => {
+                    if(configAtual.extrasSelecionados[ex.id]) {
+                        precoAdicionaisUn += ex.precoAdd;
+                    }
+                });
+            }
+
+            const precoUnitarioFinal = precoUnitarioBase + precoAdicionaisUn;
+            const valorLoteTotal = precoUnitarioFinal * lote.qtd;
+
+            document.getElementById('pm-total').innerText = formatarMoeda(valorLoteTotal);
+            document.getElementById('pm-unit-price').innerText = `Ref. ${formatarMoeda(precoUnitarioFinal)} / un`;
+        }
+
+        // --- CARRINHO ---
+        function addToCart() {
+            const prod = configAtual.produto;
+            const lote = prod.lotes[configAtual.loteIndex];
+            
+            let extrasNome = [];
+            let precoAdicionaisUn = 0;
+
+            if(prod.extras) {
+                prod.extras.forEach(ex => {
+                    if(configAtual.extrasSelecionados[ex.id]) {
+                        extrasNome.push(ex.nome);
+                        precoAdicionaisUn += ex.precoAdd;
+                    }
+                });
+            }
+
+            const precoUnitarioFinal = lote.precoUn + precoAdicionaisUn;
+            const valorTotal = precoUnitarioFinal * lote.qtd;
+
+            const item = {
+                tipo: 'lote',
+                nome: `Lote ${lote.qtd} un - ${prod.nome}`,
+                desc: `${lote.desc}${extrasNome.length > 0 ? ' | Opcionais: ' + extrasNome.join(', ') : ''}`,
+                qtdItens: lote.qtd,
+                precoUn: precoUnitarioFinal,
+                valorTotal: valorTotal
+            };
+
+            carrinho.push(item);
+            closeProductModal();
+            atualizarCarrinho();
+            mostrarToast("Lote adicionado ao orçamento!");
+        }
+
+        function adicionarAmostra(id) {
+            const amostra = bd.amostras.find(a => a.id === id);
+            carrinho.push({
+                tipo: 'amostra',
+                nome: amostra.nome,
+                desc: 'Item único',
+                valorTotal: amostra.preco
+            });
+            atualizarCarrinho();
+            mostrarToast("Item adicionado ao orçamento!");
+        }
+
+        function removerItem(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            const divItems = document.getElementById('cart-items');
+            const badge = document.getElementById('cart-badge');
+            
+            if(carrinho.length === 0) {
+                divItems.innerHTML = '<p class="text-silver text-center text-sm py-10">Seu orçamento está vazio.</p>';
+                badge.classList.add('hidden');
+                document.getElementById('cart-subtotal').innerText = "R$ 0,00";
+            } else {
+                badge.innerText = carrinho.length;
+                badge.classList.remove('hidden');
+                
+                divItems.innerHTML = carrinho.map((item, index) => `
+                    <div class="bg-dark p-3 rounded-lg border border-white/5 flex justify-between items-start">
+                        <div class="pr-3">
+                            <h5 class="text-white text-sm font-bold mb-1">${item.nome}</h5>
+                            <p class="text-[10px] text-silver leading-tight">${item.desc}</p>
+                            ${item.tipo === 'lote' ? `<p class="text-[10px] text-gold mt-1">Ref: ${formatarMoeda(item.precoUn)} / cx</p>` : ''}
+                        </div>
+                        <div class="text-right">
+                            <p class="text-white font-bold text-sm whitespace-nowrap mb-2">${formatarMoeda(item.valorTotal)}</p>
+                            <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-300 text-xs"><i class="fas fa-trash"></i> Remover</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            calcularTotais();
+        }
+
+        function calcularTotais() {
+            let subtotal = carrinho.reduce((acc, item) => acc + item.valorTotal, 0);
+            document.getElementById('cart-subtotal').innerText = formatarMoeda(subtotal);
+            
+            let totalFinal = subtotal + valorFrete;
+            document.getElementById('cart-final-total').innerText = formatarMoeda(totalFinal);
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('overlay');
+            if(drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // --- CALCULO DE FRETE (Mock Baseado em Distância de RS) ---
+        function mascaraCEP(input) {
+            let value = input.value.replace(/\D/g, '');
+            if(value.length > 5) value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+            input.value = value;
+        }
+
+        async function calcularFrete() {
+            const cepInput = document.getElementById('cep-input').value.replace(/\D/g, '');
+            const resultDiv = document.getElementById('frete-result');
+            const btnCalc = document.getElementById('btn-calc-frete');
+
+            if(cepInput.length !== 8) {
+                resultDiv.innerText = "Digite um CEP válido com 8 dígitos.";
+                resultDiv.className = "text-xs text-red-400 mt-2 block";
+                return;
+            }
+
+            if(carrinho.length === 0) {
+                resultDiv.innerText = "Adicione itens ao orçamento primeiro.";
+                resultDiv.className = "text-xs text-red-400 mt-2 block";
+                return;
+            }
+
+            btnCalc.innerHTML = '<div class="loader"></div>';
+            btnCalc.disabled = true;
+
+            try {
+                // Utilizando API gratuita do ViaCEP para descobrir o estado
+                const response = await fetch(`https://viacep.com.br/ws/${cepInput}/json/`);
+                const data = await response.json();
+
+                if(data.erro) {
+                    throw new Error("CEP não encontrado");
+                }
+
+                endDestino = data;
+                const uf = data.uf;
+                
+                // Lógica MOCK de frete baseada na origem (Parobé - RS) e peso fictício
+                let pesoEstimadoKg = carrinho.reduce((acc, item) => item.tipo === 'lote' ? acc + (item.qtdItens * 0.05) : acc, 0); 
+                if(pesoEstimadoKg < 1) pesoEstimadoKg = 1;
+
+                let tarifaBase = 0;
+                
+                // Distâncias do RS
+                const regiaoSul = ['RS', 'SC', 'PR'];
+                const regiaoSE_CO = ['SP', 'RJ', 'MG', 'ES', 'MS', 'MT', 'GO', 'DF'];
+                const regiaoNE = ['BA', 'SE', 'AL', 'PE', 'PB', 'RN', 'CE', 'PI', 'MA'];
+                const regiaoN = ['AM', 'PA', 'AC', 'RR', 'RO', 'AP', 'TO'];
+
+                if(uf === 'RS') tarifaBase = 35.00;
+                else if(regiaoSul.includes(uf)) tarifaBase = 55.00;
+                else if(regiaoSE_CO.includes(uf)) tarifaBase = 85.00;
+                else if(regiaoNE.includes(uf)) tarifaBase = 130.00;
+                else if(regiaoN.includes(uf)) tarifaBase = 160.00;
+
+                // Acrescenta valor por peso (simplificado)
+                valorFrete = tarifaBase + (pesoEstimadoKg * 1.50);
+
+                cepDestino = `${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
+                
+                resultDiv.innerHTML = `<span class="text-green-400"><i class="fas fa-check-circle"></i> Envio via JadLog/Melhor Envio para ${data.localidade}/${data.uf}</span>`;
+                resultDiv.className = "text-xs mt-2 block";
+                
+                document.getElementById('cart-frete').innerText = formatarMoeda(valorFrete);
+                document.getElementById('cart-frete').classList.add('text-white');
+                
+                calcularTotais();
+
+            } catch (error) {
+                resultDiv.innerText = "Erro ao calcular frete. Verifique o CEP.";
+                resultDiv.className = "text-xs text-red-400 mt-2 block";
+                valorFrete = 0;
+                document.getElementById('cart-frete').innerText = "A calcular";
+                calcularTotais();
+            } finally {
+                btnCalc.innerHTML = 'Calcular';
+                btnCalc.disabled = false;
+            }
+        }
+
+        // --- CHECKOUT WHATSAPP ---
+        function finalizarPedido() {
+            const nome = document.getElementById('client-name').value;
+            const cnpj = document.getElementById('client-cnpj').value;
+
+            if(carrinho.length === 0) {
+                return mostrarToast("Seu carrinho está vazio.");
+            }
+            if(!nome || !cnpj) {
+                return mostrarToast("Preencha Nome e CNPJ/CPF para contato.");
+            }
+
+            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*%0A`;
+            msg += `-----------------------------------%0A`;
+            msg += `👤 *Cliente:* ${nome}%0A`;
+            msg += `📄 *CNPJ/CPF:* ${cnpj}%0A`;
+            
+            if(cepDestino) {
+                msg += `📍 *Destino:* ${cepDestino}%0A`;
+            }
+            msg += `-----------------------------------%0A%0A`;
+            
+            msg += `*ITENS SOLICITADOS:*%0A`;
+            carrinho.forEach(item => {
+                msg += `📦 *${item.nome}*%0A`;
+                if(item.desc !== 'Item único') msg += `↳ _${item.desc}_%0A`;
+                msg += `💰 Valor: ${formatarMoeda(item.valorTotal)}%0A%0A`;
+            });
+
+            const subtotal = carrinho.reduce((acc, item) => acc + item.valorTotal, 0);
+            
+            msg += `-----------------------------------%0A`;
+            msg += `📊 *Subtotal:* ${formatarMoeda(subtotal)}%0A`;
+            if(valorFrete > 0) {
+                msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}%0A`;
+            }
+            msg += `💲 *TOTAL PREVISTO:* ${formatarMoeda(subtotal + valorFrete)}%0A`;
+            msg += `-----------------------------------%0A`;
+            msg += `_Orçamento gerado via Catálogo Online_`;
+
+            // Número genérico para envio (Substituir pelo número real da empresa)
+            const numeroWhatsApp = "5551999999999"; 
+            const link = `https://wa.me/${numeroWhatsApp}?text=${msg}`;
+            
+            window.open(link, '_blank');
+        }
+
+        // --- UTILIDADES ---
+        function mostrarToast(mensagem) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = mensagem;
+            toast.classList.remove('translate-y-20');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20');
+            }, 3000);
+        }
+
+        // Run
+        init();
+    </script>
+</body>
+</html>
