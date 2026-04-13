@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BM Embalagens Personalizadas | Orçamentos</title>
     
+    <!-- Ícone do site (Favicon) adicionado aqui -->
+    <link rel="icon" type="image/png" href="image/logo.png">
+    <link rel="apple-touch-icon" href="image/logo.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -106,9 +110,8 @@
     <header class="fixed top-0 w-full z-40 glass-header">
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 border-2 border-gold rounded flex items-center justify-center font-serif font-bold text-xl gold-gradient-text tracking-tighter">
-                    BM
-                </div>
+                <!-- Substituição da caixa de texto 'BM' pela imagem do logótipo -->
+                <img src="image/logo.png" alt="Logótipo BM Embalagens" class="h-10 w-auto object-contain">
                 <div class="hidden sm:block">
                     <h1 class="font-serif font-bold text-lg leading-tight tracking-wide text-white">EMBALAGENS</h1>
                     <p class="text-[9px] text-silver uppercase tracking-[0.2em]">Personalizadas Ltda.</p>
@@ -312,7 +315,8 @@
             const grid = document.getElementById('products-grid');
             
             grid.innerHTML = bd.produtos.map(p => {
-                const qtdBase = p.lotes && p.lotes.length > 0 ? p.lotes[p.lotes.length-1].qtd : 0;
+                // Nova lógica: Procura matematicamente a quantidade mínima em todos os lotes
+                const qtdBase = p.lotes && p.lotes.length > 0 ? Math.min(...p.lotes.map(lote => lote.qtd)) : 0;
                 
                 // Lógica para renderizar múltiplas imagens num carrossel
                 let imagensHTML = '';
