@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BM Embalagens Personalizadas | Catálogo</title>
+    <title>BM Embalagens Personalizadas | Catálogo B2B</title>
     
     <!-- Ícone da aba do navegador (Favicon) -->
-    <link rel="icon" type="image/png" href="image/logo.webp">
+    <link rel="icon" type="image/webp" href="image/logo.webp">
     <link rel="apple-touch-icon" href="image/logo.webp">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,14 +14,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* VARIÁVEIS DO TEMA CLARO E ESCURO */
+        /* VARIÁVEIS DO TEMA CLARO (PADRÃO) E ESCURO */
         :root {
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
             --bg-darker: #f1f5f9;
-            --bg-nav: rgba(255, 255, 255, 0.9);
+            --bg-nav: rgba(255, 255, 255, 0.98);
+            --bg-circle: #0f172a; /* Círculo escuro no claro */
             --text-primary: #0f172a;
             --text-secondary: #475569;
+            --icon-color: #ffffff;
             --border-color: #e2e8f0;
             --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #AA771C 100%);
         }
@@ -30,9 +32,11 @@
             --bg-body: #121417;
             --bg-card: #24272c;
             --bg-darker: #1a1c20;
-            --bg-nav: rgba(26, 28, 32, 0.9);
+            --bg-nav: rgba(26, 28, 32, 0.98);
+            --bg-circle: #ffffff; /* Círculo claro no escuro */
             --text-primary: #f5f5f5;
             --text-secondary: #94a3b8;
+            --icon-color: #121417;
             --border-color: rgba(255, 255, 255, 0.1);
         }
 
@@ -43,20 +47,22 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Classes Utilitárias do Tema */
+        /* Utilitários Temáticos */
         .theme-bg-card { background-color: var(--bg-card); }
         .theme-bg-darker { background-color: var(--bg-darker); }
         .theme-bg-nav { background-color: var(--bg-nav); }
+        .theme-bg-circle { background-color: var(--bg-circle); }
         .theme-text-primary { color: var(--text-primary); }
         .theme-text-secondary { color: var(--text-secondary); }
+        .theme-icon-color { color: var(--icon-color); }
         .theme-border { border-color: var(--border-color); }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: var(--bg-darker); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
 
         .glass-header {
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -102,144 +108,224 @@
         }
         .input-theme:focus { border-color: #D4AF37; outline: none; box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2); }
 
+        /* Estilo da Bolha Orgânica Dourada (Para Segmentos) */
+        .segment-blob {
+            background-color: #D4AF37;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            transform: rotate(10deg) translate(6px, -6px);
+            transition: transform 0.5s ease;
+        }
+        .group:hover .segment-blob {
+            transform: rotate(45deg) translate(0px, 0px) scale(1.05);
+        }
+
+        /* --- WHATSAPP PULSANTE --- */
+        .ciaweb-whatsapp-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            z-index: 80; /* Abaixo do modal/drawer mas acima do site */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .ciaweb-whatsapp-button:hover {
+            transform: scale(1.05);
+            background-color: #20b858;
+            color: white;
+        }
+
+        .ciaweb-whatsapp-button::before,
+        .ciaweb-whatsapp-button::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            border: 2px solid #25D366;
+            animation: pulse-wa 2s linear infinite;
+        }
+
+        .ciaweb-whatsapp-button::after {
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse-wa {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
         .loader {
             border: 3px solid rgba(212, 175, 55, 0.2);
             border-top: 3px solid #D4AF37;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .fade-in { animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="font-sans antialiased custom-scrollbar">
 
-    <!-- HEADER -->
+    <!-- HEADER / MENU SUPERIOR -->
     <header class="fixed top-0 w-full z-40 glass-header theme-bg-nav">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <!-- Logotipo -->
-                <img src="image/logo.webp" alt="Logótipo BM Embalagens" class="h-10 w-auto object-contain drop-shadow-md">
-                <div class="hidden sm:block">
-                    <h1 class="font-serif font-bold text-lg leading-tight tracking-wide theme-text-primary">EMBALAGENS</h1>
-                    <p class="text-[9px] theme-text-secondary uppercase tracking-[0.2em]">Personalizadas Ltda.</p>
-                </div>
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            
+            <!-- Esquerda: Menu Hamburguer -->
+            <button onclick="toggleSideMenu()" class="text-2xl theme-text-primary hover:text-[#D4AF37] transition focus:outline-none p-2 -ml-2" aria-label="Abrir Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Centro: Logotipo (Com fundo cinza sutil) -->
+            <div class="cursor-pointer bg-gray-400/20 dark:bg-gray-700/50 p-1.5 rounded-lg transition-transform active:scale-95" onclick="showHome()">
+                <img src="image/logo.webp" alt="BM Embalagens" class="h-8 md:h-10 w-auto object-contain drop-shadow-sm" onerror="this.src='https://placehold.co/100x40/9ca3af/ffffff?text=BM'">
             </div>
             
-            <div class="flex items-center gap-4">
-                <!-- Botão de Tema -->
+            <!-- Direita: Tema e Carrinho -->
+            <div class="flex items-center gap-2 md:gap-4">
                 <button onclick="toggleTheme()" class="theme-text-secondary hover:text-[#D4AF37] transition text-xl p-2 focus:outline-none" aria-label="Alternar Tema">
                     <i id="theme-icon" class="fas fa-moon"></i>
                 </button>
 
                 <button onclick="toggleCart()" class="relative text-[#D4AF37] hover:opacity-80 transition p-2 flex items-center gap-2">
-                    <span class="hidden sm:inline text-sm font-medium theme-text-primary">Orçamento</span>
+                    <span class="hidden md:inline text-sm font-medium theme-text-primary">Orçamento</span>
                     <i class="fas fa-shopping-cart text-xl"></i>
-                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                    <span id="cart-badge" class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md hidden">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="pt-28 pb-6 px-4 max-w-5xl mx-auto text-center">
-        <h2 class="font-serif text-3xl md:text-5xl font-bold mb-4 theme-text-primary">Sua marca <span class="gold-gradient-text">em destaque.</span></h2>
-        <p class="theme-text-secondary text-sm md:text-base max-w-2xl mx-auto mb-8">Unimos design e engenharia de papel para criar embalagens que elevam a percepção de sofisticação do seu produto.</p>
-        
-        <div class="flex flex-wrap justify-center gap-4 text-xs font-medium">
-            <div class="theme-bg-card px-4 py-2 rounded-full border theme-border shadow-sm"><i class="fas fa-leaf text-green-500 mr-2"></i>Sustentável</div>
-            <div class="theme-bg-card px-4 py-2 rounded-full border theme-border shadow-sm"><i class="fas fa-fire text-red-400 mr-2"></i>Até 280°C</div>
-            <div class="theme-bg-card px-4 py-2 rounded-full border theme-border shadow-sm"><i class="fas fa-tint-slash text-blue-400 mr-2"></i>Zero Vazamento</div>
+    <!-- MENU LATERAL (DRAWER) -->
+    <div id="side-menu-overlay" onclick="toggleSideMenu()" class="fixed inset-0 bg-black/60 z-[65] hidden backdrop-blur-sm transition-opacity"></div>
+    <div id="side-menu" class="fixed inset-y-0 left-0 w-72 theme-bg-card border-r theme-border shadow-2xl z-[70] transform -translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b theme-border flex justify-between items-center theme-bg-darker">
+            <h2 class="font-serif font-bold text-lg theme-text-primary">Categorias</h2>
+            <button onclick="toggleSideMenu()" class="theme-text-secondary hover:text-red-500 transition text-xl px-2"><i class="fas fa-times"></i></button>
         </div>
-    </section>
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-3" id="side-menu-list">
+            <!-- Renderizado via JS -->
+        </div>
+        <div class="p-5 border-t theme-border theme-bg-darker text-center">
+            <p class="text-xs theme-text-secondary">BM Embalagens &copy; 2026</p>
+        </div>
+    </div>
 
-    <!-- MAIN APP AREA -->
-    <main class="max-w-5xl mx-auto px-4 pb-24">
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto pt-24 pb-24 min-h-screen">
         
         <!-- Loading Indicator -->
-        <div id="loading-indicator" class="flex flex-col items-center justify-center py-10 text-[#D4AF37]">
-            <div class="loader mb-4 w-10 h-10 border-4"></div>
-            <p class="font-medium">Carregando catálogo...</p>
+        <div id="loading-indicator" class="flex flex-col items-center justify-center py-20 text-[#D4AF37]">
+            <div class="loader mb-4"></div>
+            <p class="font-medium text-sm">Carregando catálogo...</p>
         </div>
 
-        <div id="app-content" class="hidden">
-            <!-- CATEGORIAS -->
-            <div class="mb-12">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-1 h-6 bg-[#D4AF37] rounded-full"></div>
-                    <h3 class="font-serif text-2xl font-bold theme-text-primary">Nossas Linhas</h3>
-                </div>
-                <div id="categories-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Preenchido via JS -->
+        <!-- VISÃO 1: PÁGINA INICIAL (BANNERS E SEGMENTOS) -->
+        <div id="view-home" class="hidden fade-in">
+            <!-- Banners Carousel -->
+            <div class="px-4 mb-12">
+                <div class="rounded-2xl overflow-hidden h-48 md:h-80 relative theme-bg-darker shadow-lg group" id="banner-container">
+                    <!-- Banners via JS -->
                 </div>
             </div>
 
-            <!-- PRODUTOS -->
-            <div id="products-section" class="pt-4 border-t theme-border border-dashed">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 id="category-title" class="font-serif text-2xl font-bold theme-text-primary">Marmitas Anti-Vazamento</h3>
+            <!-- Seção de Segmentos / Categorias (Design Redondo) -->
+            <div class="px-4 mb-12">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="font-serif text-2xl md:text-3xl font-bold theme-text-primary">Nossos Segmentos</h2>
+                    <div class="flex gap-2">
+                        <button class="w-8 h-8 rounded-full border theme-border flex items-center justify-center theme-text-secondary hover:bg-[#D4AF37] hover:text-white transition" onclick="scrollSegments(-1)"><i class="fas fa-chevron-left text-xs"></i></button>
+                        <button class="w-8 h-8 rounded-full border theme-border flex items-center justify-center theme-text-secondary hover:bg-[#D4AF37] hover:text-white transition" onclick="scrollSegments(1)"><i class="fas fa-chevron-right text-xs"></i></button>
+                    </div>
                 </div>
                 
-                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Renderizado via JS -->
-                </div>
-
-                <!-- Empty State de Produtos -->
-                <div id="empty-products" class="hidden text-center py-12 theme-bg-darker rounded-xl border theme-border border-dashed">
-                    <i class="fas fa-box-open text-4xl text-[#D4AF37] opacity-50 mb-4"></i>
-                    <p class="theme-text-secondary font-medium">Nenhum produto cadastrado nesta categoria ainda.</p>
-                </div>
-            </div>
-
-            <!-- AMOSTRAS -->
-            <div id="samples-section" class="mt-16 pt-8 border-t theme-border text-center">
-                <h3 class="font-serif text-2xl font-bold mb-6 theme-text-primary">Amostras e Provas</h3>
-                <div id="samples-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                    <!-- Renderizado via JS -->
+                <div class="flex overflow-x-auto gap-6 pb-6 pt-2 custom-scrollbar snap-x snap-mandatory" id="segments-grid">
+                    <!-- Segmentos renderizados via JS -->
                 </div>
             </div>
         </div>
+
+        <!-- VISÃO 2: PRODUTOS DA CATEGORIA -->
+        <div id="view-category" class="hidden px-4 fade-in">
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <button onclick="showHome()" class="text-sm font-bold text-[#D4AF37] hover:opacity-80 transition mb-2 flex items-center gap-2">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Início
+                    </button>
+                    <h2 id="category-title" class="font-serif text-3xl font-bold theme-text-primary">Nome Categoria</h2>
+                    <p id="category-desc" class="text-sm theme-text-secondary mt-1 max-w-2xl"></p>
+                </div>
+            </div>
+            
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <!-- Produtos via JS -->
+            </div>
+
+            <!-- Empty State de Produtos -->
+            <div id="empty-products" class="hidden text-center py-16 theme-bg-darker rounded-2xl border theme-border border-dashed">
+                <i class="fas fa-box-open text-5xl text-[#D4AF37] opacity-40 mb-4"></i>
+                <h3 class="text-lg font-bold theme-text-primary mb-2">Categoria em Construção</h3>
+                <p class="theme-text-secondary text-sm">Em breve novos produtos disponíveis aqui.</p>
+                <button onclick="showHome()" class="mt-6 btn-outline-gold px-6 py-2 rounded-full text-sm font-bold">Voltar</button>
+            </div>
+        </div>
+
     </main>
 
     <!-- MODAL DO PRODUTO (CONFIGURADOR) -->
-    <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-        <div class="theme-bg-card w-full max-w-2xl rounded-xl border theme-border shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
+    <div id="product-modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div class="theme-bg-card w-full max-w-3xl rounded-2xl border theme-border shadow-2xl overflow-hidden flex flex-col max-h-[95vh] fade-in">
             
             <div class="p-4 border-b theme-border flex justify-between items-center theme-bg-darker z-20">
                 <h3 id="pm-title" class="font-serif font-bold text-xl gold-gradient-text">Nome do Produto</h3>
-                <button onclick="closeProductModal()" class="theme-text-secondary hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+                <button onclick="closeProductModal()" class="theme-text-secondary hover:text-red-500 transition p-1"><i class="fas fa-times text-xl"></i></button>
             </div>
 
-            <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col">
-                <div id="pm-img-container" class="w-full h-48 theme-bg-darker hidden flex-shrink-0 relative carousel-container">
+            <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col md:flex-row">
+                
+                <!-- Coluna Esquerda: Imagem -->
+                <div id="pm-img-container" class="w-full md:w-2/5 h-48 md:h-auto theme-bg-darker hidden md:flex flex-shrink-0 relative carousel-container border-b md:border-b-0 md:border-r theme-border">
                     <!-- Imagens JS -->
                 </div>
 
-                <div class="p-6 relative z-10">
-                    <p id="pm-desc" class="text-sm theme-text-secondary mb-6"></p>
+                <!-- Coluna Direita: Opções -->
+                <div class="p-6 flex-1 flex flex-col">
+                    <p id="pm-desc" class="text-sm theme-text-secondary mb-6 leading-relaxed"></p>
                     
                     <div class="mb-6">
                         <label class="block text-xs uppercase tracking-wider theme-text-secondary mb-3 font-bold">1. Escolha a Quantidade (Lote)</label>
-                        <div id="pm-lots" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div id="pm-lots" class="grid grid-cols-2 gap-3">
                             <!-- Render via JS -->
                         </div>
                     </div>
 
                     <div id="pm-extras-container" class="mb-6 hidden">
-                        <label class="block text-xs uppercase tracking-wider theme-text-secondary mb-3 font-bold">2. Acabamentos Adicionais (Valor por un.)</label>
+                        <label class="block text-xs uppercase tracking-wider theme-text-secondary mb-3 font-bold">2. Acabamentos Adicionais (Un.)</label>
                         <div id="pm-extras" class="space-y-2">
                             <!-- Render via JS -->
                         </div>
                     </div>
 
-                    <div class="theme-bg-darker p-4 rounded-lg border border-[#D4AF37]/30 flex justify-between items-center mt-auto shadow-sm">
+                    <div class="theme-bg-darker p-4 rounded-xl border border-[#D4AF37]/30 flex flex-col sm:flex-row justify-between sm:items-center gap-4 mt-auto shadow-sm">
                         <div>
                             <p class="text-xs theme-text-secondary">Valor Total do Lote:</p>
                             <p id="pm-total" class="font-bold text-2xl text-[#D4AF37]">R$ 0,00</p>
-                            <p id="pm-unit-price" class="text-[10px] theme-text-secondary mt-1">Ref. R$ 0,00 / un</p>
+                            <p id="pm-unit-price" class="text-[10px] theme-text-secondary mt-1 font-medium">Ref. R$ 0,00 / un</p>
                         </div>
-                        <button onclick="addToCart()" class="btn-gold px-6 py-3 rounded font-bold shadow-lg flex items-center gap-2">
+                        <button onclick="addToCart()" class="btn-gold w-full sm:w-auto px-6 py-3 rounded-lg font-bold shadow-lg flex items-center justify-center gap-2">
                             Adicionar <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -249,10 +335,10 @@
     </div>
 
     <!-- DRAWER DO CARRINHO & CHECKOUT -->
-    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full md:w-[450px] theme-bg-card border-l theme-border shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full md:w-[450px] theme-bg-card border-l theme-border shadow-2xl z-[90] transform translate-x-full transition-transform duration-300 flex flex-col">
         <div class="p-5 border-b theme-border flex justify-between items-center theme-bg-darker">
             <h2 class="font-serif font-bold text-xl gold-gradient-text">Seu Orçamento</h2>
-            <button onclick="toggleCart()" class="theme-text-secondary hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            <button onclick="toggleCart()" class="theme-text-secondary hover:text-red-500 transition p-1"><i class="fas fa-times text-xl"></i></button>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scrollbar p-5">
@@ -260,7 +346,6 @@
                 <!-- Itens -->
             </div>
 
-            <!-- Calculo Frete -->
             <div class="theme-bg-darker p-4 rounded-xl border theme-border mb-6 shadow-sm">
                 <h4 class="text-sm font-bold theme-text-primary mb-3 flex items-center gap-2"><i class="fas fa-truck text-[#D4AF37]"></i> Frete Estimado</h4>
                 <p class="text-[10px] theme-text-secondary mb-3">Origem: Parobé - RS (CEP: 95630-000)</p>
@@ -271,7 +356,6 @@
                 <div id="frete-result" class="text-xs hidden"></div>
             </div>
 
-            <!-- Contato -->
             <div class="theme-bg-darker p-4 rounded-xl border theme-border shadow-sm">
                 <h4 class="text-sm font-bold theme-text-primary mb-3">Dados para Contato</h4>
                 <div class="space-y-3">
@@ -291,42 +375,43 @@
                 <span id="cart-frete" class="font-medium">A calcular</span>
             </div>
             <div class="flex justify-between items-end mb-6 border-t theme-border border-dashed pt-4">
-                <span class="theme-text-primary font-bold">Total:</span>
+                <span class="theme-text-primary font-bold">Total Final:</span>
                 <span id="cart-final-total" class="font-bold text-2xl text-[#D4AF37]">R$ 0,00</span>
             </div>
-            <button onclick="finalizarPedido()" class="w-full btn-gold py-4 rounded font-bold text-center flex items-center justify-center gap-2">
-                <i class="fab fa-whatsapp text-xl"></i> Enviar Orçamento
+            <button onclick="finalizarPedido()" class="w-full btn-gold py-4 rounded-xl font-bold text-center flex items-center justify-center gap-2 text-lg">
+                <i class="fab fa-whatsapp"></i> Enviar Orçamento
             </button>
         </div>
     </div>
 
-    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 z-[55] hidden backdrop-blur-sm transition-opacity"></div>
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/60 z-[85] hidden backdrop-blur-sm transition-opacity"></div>
 
-    <!-- MENSAGEM FLUTUANTE -->
-    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-[#D4AF37] text-[#121417] px-6 py-3 rounded-full font-bold shadow-2xl transition-transform duration-300 translate-y-24 z-[70] flex items-center gap-2">
+    <!-- MENSAGEM FLUTUANTE TOAST -->
+    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-[#D4AF37] text-[#121417] px-6 py-3 rounded-full font-bold shadow-2xl transition-transform duration-300 translate-y-24 z-[100] flex items-center gap-2 border border-[#AA771C]/30">
         <i id="toast-icon" class="fas fa-check-circle"></i> <span id="toast-msg">Mensagem</span>
     </div>
 
-    <!-- SCRIPT -->
+    <!-- BOTÃO WHATSAPP PULSANTE (FIXO) -->
+    <a href="#" class="ciaweb-whatsapp-button" id="ciaweb-whatsapp-btn" onclick="ciaOpenWhatsApp(); return false;" aria-label="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- SCRIPTS -->
     <script>
+        // URL DO JSON NO NPOINT
         const API_JSON_URL = 'https://api.npoint.io/41aa4bf80479b83f68d7';
 
-        let bd = { categorias: [], produtos: [], amostras: [] };
+        let bd = { banners: [], categorias: [], produtos: [], amostras: [] };
         let carrinho = [];
         let configAtual = { produto: null, loteIndex: -1, extrasSelecionados: {} };
         let valorFrete = 0;
         let cepDestino = "";
         let endDestino = {};
-        let globalCarouselInterval = null;
-        let categoriaAtual = 'marmitas'; // default
+        let bannerInterval = null;
+        let productInterval = null;
 
-        // --- INICIALIZAÇÃO ---
+        // --- INICIALIZAÇÃO E TEMA ---
         async function init() {
-            // Verifica tema padrão (Dia = Default, mas respeita a escolha do sistema se quiser)
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                // Descomente a linha abaixo se quiser que force o escuro baseado no PC do usuário
-                // toggleTheme(); 
-            }
             await carregarDadosDoNpoint();
         }
 
@@ -342,24 +427,27 @@
                 const response = await fetch(`${API_JSON_URL}?t=${Date.now()}`);
                 const data = await response.json();
                 
-                if(data && data.produtos) {
+                if(data && data.categorias) {
                     bd = data;
-                    document.getElementById('loading-indicator').classList.add('hidden');
-                    document.getElementById('app-content').classList.remove('hidden');
                     
-                    // Se o JSON novo não tiver categorias (preventivo), nós simulamos a antiga
-                    if(!bd.categorias) {
-                        bd.categorias = [{ id: "marmitas", nome: "Marmitas Anti-Vazamento", ativo: true, icone: "fas fa-box" }];
-                        bd.produtos.forEach(p => p.categoria_id = "marmitas");
+                    if(!bd.banners || bd.banners.length === 0) {
+                        bd.banners = [
+                            { imagem: "https://placehold.co/1200x400/D4AF37/121417?text=BM+Embalagens+-+Premium", link: "#" },
+                            { imagem: "https://placehold.co/1200x400/121417/D4AF37?text=Sua+Marca+Em+Destaque", link: "#" }
+                        ];
                     }
 
-                    renderizarInterface();
+                    document.getElementById('loading-indicator').classList.add('hidden');
+                    renderizarMenuLateral();
+                    renderizarBanners();
+                    renderizarSegmentos();
+                    showHome();
                 } else {
                     throw new Error("JSON inválido");
                 }
             } catch (error) {
-                console.error("Erro ao carregar os dados:", error);
-                document.getElementById('loading-indicator').innerHTML = `<p class="text-red-500 font-bold"><i class="fas fa-exclamation-triangle"></i> Falha ao carregar catálogo. Atualize a página.</p>`;
+                console.error("Erro:", error);
+                document.getElementById('loading-indicator').innerHTML = `<p class="text-red-500 font-bold"><i class="fas fa-exclamation-triangle"></i> Falha ao carregar catálogo.</p>`;
             }
         }
 
@@ -367,45 +455,105 @@
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // --- RENDERIZAÇÃO DA INTERFACE ---
-        function renderizarInterface() {
-            renderCategorias();
-            renderizarCatalogo();
-            renderAmostras();
+        // --- NAVEGAÇÃO SPA (Home <-> Category) ---
+        function showHome() {
+            document.getElementById('view-category').classList.add('hidden');
+            document.getElementById('view-home').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function renderCategorias() {
-            const grid = document.getElementById('categories-grid');
+        function showCategory(idCat, isAtivo, nomeCat, descCat) {
+            if (!isAtivo) {
+                mostrarToast(`A linha de ${nomeCat} está em construção. Em breve!`, true);
+                return;
+            }
+            
+            document.getElementById('view-home').classList.add('hidden');
+            const viewCat = document.getElementById('view-category');
+            viewCat.classList.remove('hidden');
+            
+            document.getElementById('category-title').innerText = nomeCat;
+            document.getElementById('category-desc').innerText = descCat || '';
+
+            renderizarProdutos(idCat);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Fecha menu lateral se estiver aberto
+            if(!document.getElementById('side-menu').classList.contains('-translate-x-full')) {
+                toggleSideMenu();
+            }
+        }
+
+        // --- RENDERIZAÇÃO HOME ---
+        function renderizarBanners() {
+            const container = document.getElementById('banner-container');
+            container.innerHTML = bd.banners.map((b, i) => `
+                <img src="${b.imagem}" class="banner-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Banner promocional">
+            `).join('');
+
+            if(bd.banners.length > 1) {
+                if(bannerInterval) clearInterval(bannerInterval);
+                bannerInterval = setInterval(() => {
+                    const imgs = container.querySelectorAll('.banner-img');
+                    let atual = Array.from(imgs).findIndex(img => img.classList.contains('opacity-100'));
+                    imgs[atual].classList.remove('opacity-100'); imgs[atual].classList.add('opacity-0');
+                    const proximo = (atual + 1) % imgs.length;
+                    imgs[proximo].classList.remove('opacity-0'); imgs[proximo].classList.add('opacity-100');
+                }, 4000);
+            }
+        }
+
+        function renderizarSegmentos() {
+            const grid = document.getElementById('segments-grid');
             grid.innerHTML = bd.categorias.map(cat => {
-                const isActive = cat.id === categoriaAtual;
-                const filterStyle = isActive ? 'ring-2 ring-[#D4AF37] ring-offset-2 ring-offset-[var(--bg-body)] scale-[1.02]' : 'opacity-90 grayscale-[20%] hover:grayscale-0';
-                
+                const grayscale = !cat.ativo ? 'grayscale opacity-70' : '';
                 return `
-                <div onclick="selecionarCategoria('${cat.id}', ${cat.ativo}, '${cat.nome}')" class="rounded-xl p-4 cursor-pointer transition-all duration-300 relative overflow-hidden group shadow-md ${filterStyle}" style="background: var(--gold-gradient); color: white;">
-                    ${!cat.ativo ? '<div class="absolute inset-0 bg-black/50 backdrop-blur-[1.5px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 duration-300"><span class="bg-black text-white text-[10px] font-bold px-2 py-1 rounded uppercase shadow-lg">Em Construção</span></div>' : ''}
-                    <i class="${cat.icone} text-2xl mb-3 opacity-95 relative z-0"></i>
-                    <h4 class="font-bold text-sm mb-1 leading-tight relative z-0">${cat.nome}</h4>
-                    <p class="text-[10px] opacity-80 leading-tight relative z-0 hidden sm:block">${cat.descricao}</p>
+                <div class="flex flex-col items-center gap-3 cursor-pointer group flex-shrink-0 snap-start w-24 md:w-28" onclick="showCategory('${cat.id}', ${cat.ativo}, '${cat.nome}', '${cat.descricao}')">
+                    <div class="relative w-20 h-20 md:w-24 md:h-24 ${grayscale}">
+                        <div class="absolute inset-0 segment-blob shadow-md"></div>
+                        <div class="absolute inset-0 theme-bg-circle rounded-full flex items-center justify-center shadow-lg border-4 theme-border z-10 transition-transform group-hover:scale-105">
+                            <i class="${cat.icone} text-2xl md:text-3xl theme-icon-color"></i>
+                        </div>
+                        ${!cat.ativo ? '<div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-[8px] font-bold px-1.5 py-0.5 rounded uppercase z-20 whitespace-nowrap">Em breve</div>' : ''}
+                    </div>
+                    <span class="text-[11px] md:text-xs font-bold text-center theme-text-primary leading-tight line-clamp-2 px-1 group-hover:text-[#D4AF37] transition-colors">${cat.nome}</span>
                 </div>
             `}).join('');
         }
 
-        function selecionarCategoria(id, ativo, nome) {
-            if (!ativo) {
-                mostrarToast(`A linha de ${nome} está em construção. Em breve!`, true);
-                return;
-            }
-            categoriaAtual = id;
-            document.getElementById('category-title').innerText = nome;
-            renderCategorias();
-            renderizarCatalogo();
+        function scrollSegments(dir) {
+            const container = document.getElementById('segments-grid');
+            container.scrollBy({ left: dir * 200, behavior: 'smooth' });
         }
 
-        function renderizarCatalogo() {
+        function renderizarMenuLateral() {
+            const list = document.getElementById('side-menu-list');
+            list.innerHTML = bd.categorias.map(cat => `
+                <button onclick="showCategory('${cat.id}', ${cat.ativo}, '${cat.nome}', '${cat.descricao}')" class="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition mb-1 ${!cat.ativo ? 'opacity-50' : ''}">
+                    <div class="w-8 h-8 rounded-full theme-bg-circle flex items-center justify-center flex-shrink-0">
+                        <i class="${cat.icone} theme-icon-color text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <span class="text-sm font-bold theme-text-primary block leading-tight">${cat.nome}</span>
+                        ${!cat.ativo ? '<span class="text-[9px] text-[#D4AF37] uppercase font-bold">Em construção</span>' : ''}
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function toggleSideMenu() {
+            const menu = document.getElementById('side-menu');
+            const overlay = document.getElementById('side-menu-overlay');
+            menu.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        // --- RENDERIZAÇÃO PRODUTOS ---
+        function renderizarProdutos(categoriaId) {
             const grid = document.getElementById('products-grid');
             const emptyState = document.getElementById('empty-products');
             
-            const produtosFiltrados = bd.produtos.filter(p => p.categoria_id === categoriaAtual);
+            const produtosFiltrados = bd.produtos.filter(p => p.categoria_id === categoriaId);
 
             if (produtosFiltrados.length === 0) {
                 grid.innerHTML = '';
@@ -418,96 +566,57 @@
             emptyState.classList.add('hidden');
 
             grid.innerHTML = produtosFiltrados.map(p => {
-                // Lógica da Quantidade mínima automática
                 const qtdBase = p.lotes && p.lotes.length > 0 ? Math.min(...p.lotes.map(lote => lote.qtd)) : 0;
                 
                 let imagensHTML = '';
                 if (p.imagens && p.imagens.length > 0) {
                     imagensHTML = p.imagens.map((img, i) => `
-                        <img src="${img}" alt="Foto de ${p.nome}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-80 group-hover:opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto'">
+                        <img src="${img}" alt="Foto de ${p.nome}" class="prod-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-90 group-hover:opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto'">
                     `).join('');
                 } else {
                     imagensHTML = `<img src="https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto" class="w-full h-full object-cover opacity-70">`;
                 }
 
                 return `
-                <div class="theme-bg-card rounded-xl border theme-border card-hover cursor-pointer overflow-hidden flex flex-col group shadow-sm" onclick="abrirModalProduto('${p.id}')">
-                    <div class="h-48 w-full relative theme-bg-darker carousel-container">
+                <div class="theme-bg-card rounded-2xl border theme-border card-hover cursor-pointer overflow-hidden flex flex-col group shadow-sm" onclick="abrirModalProduto('${p.id}')">
+                    <div class="h-56 w-full relative theme-bg-darker prod-carousel-container">
                         ${imagensHTML}
-                        <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-[#D4AF37] text-[10px] px-2 py-1 rounded border border-[#D4AF37]/30 font-bold uppercase tracking-wider shadow-lg z-10">
-                            A partir de ${qtdBase} un
+                        <div class="absolute top-3 right-3 bg-black/70 backdrop-blur text-[#D4AF37] text-[10px] px-2 py-1 rounded-full border border-[#D4AF37]/30 font-bold uppercase tracking-wider shadow-lg z-10">
+                            Lotes de ${qtdBase} un
                         </div>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col relative z-10">
-                        <div class="flex items-center gap-3 mb-2">
-                            <i class="fas ${p.icone} text-[#D4AF37] text-lg"></i>
-                            <h3 class="font-serif font-bold text-xl theme-text-primary leading-tight">${p.nome}</h3>
-                        </div>
-                        <p class="text-sm theme-text-secondary line-clamp-3 mb-4 flex-1">${p.descricao}</p>
-                        <div class="flex justify-between items-center text-[#D4AF37] font-medium text-sm mt-auto border-t theme-border pt-4 border-dashed">
-                            <span>Configurar Lote</span> 
-                            <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    <div class="p-5 flex-1 flex flex-col relative z-10">
+                        <h3 class="font-serif font-bold text-lg theme-text-primary leading-tight mb-2">${p.nome}</h3>
+                        <p class="text-xs theme-text-secondary line-clamp-2 mb-4 flex-1">${p.descricao}</p>
+                        <div class="flex justify-between items-center text-[#D4AF37] font-bold text-xs mt-auto border-t theme-border pt-4 border-dashed">
+                            <span class="uppercase tracking-wide">Configurar Lote</span> 
+                            <i class="fas fa-arrow-right transition-transform group-hover:translate-x-1 bg-[#D4AF37]/10 p-1.5 rounded-full"></i>
                         </div>
                     </div>
                 </div>
             `}).join('');
 
-            iniciarCarrosseis();
+            iniciarCarrosselProdutos();
         }
 
-        function renderAmostras() {
-            const grid = document.getElementById('samples-grid');
-            if(!bd.amostras || bd.amostras.length === 0) {
-                document.getElementById('samples-section').classList.add('hidden');
-                return;
-            }
-
-            grid.innerHTML = bd.amostras.map(a => {
-                let imgAmostra = (a.imagens && a.imagens.length > 0) ? a.imagens[0] : '';
-                return `
-                <div class="theme-bg-card border border-dashed theme-border rounded-xl overflow-hidden flex flex-col shadow-sm">
-                    <div class="h-28 w-full relative theme-bg-darker flex items-center justify-center overflow-hidden">
-                        <img src="${imgAmostra}" alt="${a.nome}" class="w-full h-full object-cover opacity-50 blur-[2px]" onerror="this.style.display='none'">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <i class="fas ${a.icone} text-3xl text-[#D4AF37] drop-shadow-md"></i>
-                        </div>
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col">
-                        <h4 class="font-bold theme-text-primary mb-2">${a.nome}</h4>
-                        <p class="text-xs theme-text-secondary mb-4 flex-1">${a.descricao}</p>
-                        <div class="flex justify-between items-center mt-auto pt-3 border-t theme-border">
-                            <span class="font-bold text-[#D4AF37]">${formatarMoeda(a.preco)}</span>
-                            <button onclick="adicionarAmostra('${a.id}')" class="btn-outline-gold px-3 py-1 text-xs rounded font-bold">Adicionar</button>
-                        </div>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        // --- SISTEMA DE CARROSSEL ---
-        function iniciarCarrosseis() {
-            if (globalCarouselInterval) clearInterval(globalCarouselInterval);
-            globalCarouselInterval = setInterval(() => {
-                document.querySelectorAll('.carousel-container').forEach(container => {
-                    const imagens = container.querySelectorAll('.carousel-img');
+        function iniciarCarrosselProdutos() {
+            if (productInterval) clearInterval(productInterval);
+            productInterval = setInterval(() => {
+                document.querySelectorAll('.prod-carousel-container').forEach(container => {
+                    const imagens = container.querySelectorAll('.prod-img');
                     if (imagens.length <= 1) return;
                     
-                    let indiceAtual = Array.from(imagens).findIndex(img => img.classList.contains('opacity-80') || img.classList.contains('opacity-100') || img.classList.contains('group-hover:opacity-100'));
+                    let indiceAtual = Array.from(imagens).findIndex(img => img.classList.contains('opacity-90') || img.classList.contains('opacity-100') || img.classList.contains('group-hover:opacity-100'));
                     if (indiceAtual === -1) indiceAtual = 0;
                     
-                    imagens[indiceAtual].classList.remove('opacity-80', 'opacity-100', 'group-hover:opacity-100');
+                    imagens[indiceAtual].classList.remove('opacity-90', 'opacity-100', 'group-hover:opacity-100');
                     imagens[indiceAtual].classList.add('opacity-0');
                     
                     const proximoIndice = (indiceAtual + 1) % imagens.length;
                     imagens[proximoIndice].classList.remove('opacity-0');
-                    
-                    if (container.id === 'pm-img-container') {
-                        imagens[proximoIndice].classList.add('opacity-100');
-                    } else {
-                        imagens[proximoIndice].classList.add('opacity-80', 'group-hover:opacity-100');
-                    }
+                    imagens[proximoIndice].classList.add('opacity-90', 'group-hover:opacity-100');
                 });
-            }, 3000);
+            }, 3500);
         }
 
         // --- LÓGICA DE PRODUTOS / MODAL ---
@@ -523,21 +632,23 @@
             const imgContainer = document.getElementById('pm-img-container');
             if (produto.imagens && produto.imagens.length > 0) {
                 let imgsHTML = produto.imagens.map((img, i) => `
-                    <img src="${img}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto'">
+                    <img src="${img}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/24272c/D4AF37?text=Sem+Foto'">
                 `).join('');
-                imgContainer.innerHTML = imgsHTML + '<div class="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent opacity-80 z-10"></div>';
+                imgContainer.innerHTML = imgsHTML;
                 imgContainer.classList.remove('hidden');
+                imgContainer.classList.add('flex');
             } else {
                 imgContainer.classList.add('hidden');
+                imgContainer.classList.remove('flex');
             }
 
             const divLotes = document.getElementById('pm-lots');
             divLotes.innerHTML = produto.lotes.map((lote, index) => `
-                <button onclick="selecionarLote(${index})" id="btn-lote-${index}" class="btn-lote text-left p-3 rounded-lg border theme-border theme-bg-darker hover:border-[#D4AF37]/50 transition relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-[#D4AF37]/10 opacity-0 group-hover:opacity-100 transition"></div>
-                    <div class="relative z-10">
-                        <span class="block font-bold theme-text-primary text-sm">${lote.qtd} un</span>
-                        <span class="block text-[#D4AF37] text-xs font-medium mb-1">${formatarMoeda(lote.precoUn)} / un</span>
+                <button onclick="selecionarLote(${index})" id="btn-lote-${index}" class="btn-lote text-left p-3 rounded-xl border theme-border theme-bg-darker hover:border-[#D4AF37]/50 transition relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-[#D4AF37]/5 opacity-0 group-hover:opacity-100 transition"></div>
+                    <div class="relative z-10 flex flex-col h-full justify-between">
+                        <span class="block font-bold theme-text-primary text-sm mb-1">${lote.qtd} un</span>
+                        <span class="block text-[#D4AF37] text-sm font-bold mb-1">${formatarMoeda(lote.precoUn)}<span class="text-[9px] font-normal"> / un</span></span>
                         <span class="block text-[9px] theme-text-secondary leading-tight">${lote.desc}</span>
                     </div>
                 </button>
@@ -548,12 +659,12 @@
             if(produto.extras && produto.extras.length > 0) {
                 contExtras.classList.remove('hidden');
                 divExtras.innerHTML = produto.extras.map((ex, index) => `
-                    <label class="flex items-center justify-between p-3 rounded-lg border theme-border theme-bg-darker cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition">
+                    <label class="flex items-center justify-between p-3 rounded-xl border theme-border theme-bg-darker cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 transition">
                         <div class="flex items-center gap-3">
                             <input type="checkbox" onchange="toggleExtra('${ex.id}', this.checked)" class="w-4 h-4 accent-[#D4AF37] rounded">
-                            <span class="text-sm theme-text-primary">${ex.nome}</span>
+                            <span class="text-xs font-medium theme-text-primary">${ex.nome}</span>
                         </div>
-                        <span class="text-xs text-[#D4AF37] font-medium">+ ${formatarMoeda(ex.precoAdd)}/un</span>
+                        <span class="text-xs text-[#D4AF37] font-bold">+ ${formatarMoeda(ex.precoAdd)}</span>
                     </label>
                 `).join('');
             } else {
@@ -641,18 +752,11 @@
             if (document.getElementById('cep-input').value.length >= 8) calcularFrete();
         }
 
-        function adicionarAmostra(id) {
-            const amostra = bd.amostras.find(a => a.id === id);
-            carrinho.push({ tipo: 'amostra', nome: amostra.nome, desc: 'Item único', valorTotal: amostra.preco });
-            atualizarCarrinho();
-            mostrarToast("Item adicionado ao orçamento!");
-        }
-
         function removerItem(index) {
             carrinho.splice(index, 1);
             atualizarCarrinho();
             if (carrinho.length > 0 && document.getElementById('cep-input').value.length >= 8) calcularFrete();
-            else if (carrinho.length === 0) { valorFrete = 0; document.getElementById('cart-frete').innerText = "A calcular"; document.getElementById('cart-frete').classList.remove('theme-text-primary'); calcularTotais(); }
+            else if (carrinho.length === 0) { valorFrete = 0; document.getElementById('cart-frete').innerText = "A calcular"; document.getElementById('cart-frete').classList.remove('text-[#D4AF37]'); calcularTotais(); }
         }
 
         function atualizarCarrinho() {
@@ -660,7 +764,7 @@
             const badge = document.getElementById('cart-badge');
             
             if(carrinho.length === 0) {
-                divItems.innerHTML = '<p class="theme-text-secondary text-center text-sm py-10">Seu orçamento está vazio.</p>';
+                divItems.innerHTML = '<p class="theme-text-secondary text-center text-sm py-10"><i class="fas fa-box-open text-3xl opacity-30 block mb-3"></i>Seu orçamento está vazio.</p>';
                 badge.classList.add('hidden');
                 document.getElementById('cart-subtotal').innerText = "R$ 0,00";
             } else {
@@ -668,15 +772,15 @@
                 badge.classList.remove('hidden');
                 
                 divItems.innerHTML = carrinho.map((item, index) => `
-                    <div class="theme-bg-darker p-3 rounded-lg border theme-border flex justify-between items-start shadow-sm">
+                    <div class="theme-bg-darker p-4 rounded-xl border theme-border flex justify-between items-start shadow-sm">
                         <div class="pr-3">
                             <h5 class="theme-text-primary text-sm font-bold mb-1">${item.nome}</h5>
                             <p class="text-[10px] theme-text-secondary leading-tight">${item.desc}</p>
-                            ${item.tipo === 'lote' ? `<p class="text-[10px] text-[#D4AF37] mt-1">Ref: ${formatarMoeda(item.precoUn)} / cx</p>` : ''}
+                            ${item.tipo === 'lote' ? `<p class="text-[10px] text-[#D4AF37] mt-2 font-bold bg-[#D4AF37]/10 inline-block px-2 py-0.5 rounded">Ref: ${formatarMoeda(item.precoUn)} / cx</p>` : ''}
                         </div>
                         <div class="text-right">
-                            <p class="theme-text-primary font-bold text-sm whitespace-nowrap mb-2">${formatarMoeda(item.valorTotal)}</p>
-                            <button onclick="removerItem(${index})" class="text-red-500 hover:text-red-700 text-xs transition"><i class="fas fa-trash"></i></button>
+                            <p class="theme-text-primary font-bold text-sm whitespace-nowrap mb-3">${formatarMoeda(item.valorTotal)}</p>
+                            <button onclick="removerItem(${index})" class="text-red-400 hover:text-red-600 bg-red-400/10 w-8 h-8 rounded-full text-xs transition"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                 `).join('');
@@ -740,11 +844,11 @@
                 resultDiv.innerHTML = `<span class="text-green-600 dark:text-green-400 font-medium"><i class="fas fa-check-circle"></i> Envio p/ ${data.localidade}/${data.uf}</span>`;
                 resultDiv.className = "text-xs mt-2 block";
                 document.getElementById('cart-frete').innerText = formatarMoeda(valorFrete);
-                document.getElementById('cart-frete').classList.add('theme-text-primary');
+                document.getElementById('cart-frete').classList.add('text-[#D4AF37]');
                 calcularTotais();
             } catch (error) {
                 resultDiv.innerText = "Erro ao calcular frete."; resultDiv.className = "text-xs text-red-500 mt-2 block";
-                valorFrete = 0; document.getElementById('cart-frete').innerText = "A calcular"; document.getElementById('cart-frete').classList.remove('theme-text-primary'); calcularTotais();
+                valorFrete = 0; document.getElementById('cart-frete').innerText = "A calcular"; document.getElementById('cart-frete').classList.remove('text-[#D4AF37]'); calcularTotais();
             } finally {
                 btnCalc.innerHTML = 'Calcular'; btnCalc.disabled = false;
             }
@@ -770,7 +874,15 @@
             if(valorFrete > 0) msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}%0A`;
             msg += `💲 *TOTAL:* ${formatarMoeda(subtotal + valorFrete)}%0A-----------------------------------%0A_via Catálogo Online_`;
 
-            window.open(`https://wa.me/5551999999999?text=${msg}`, '_blank');
+            window.open(`https://wa.me/5551999999999?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // --- FUNÇÃO DO BOTÃO WHATSAPP PULSANTE ---
+        function ciaOpenWhatsApp() {
+            const numeroWhatsApp = "5551999999999"; // Substituir pelo seu número real
+            const msgPreDefinida = "Olá! Gostaria de tirar algumas dúvidas sobre as embalagens.";
+            const link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msgPreDefinida)}`;
+            window.open(link, '_blank');
         }
 
         function mostrarToast(mensagem, isError = false) {
@@ -778,12 +890,12 @@
             document.getElementById('toast-msg').innerText = mensagem;
             
             if(isError) {
-                toast.classList.remove('bg-[#D4AF37]', 'text-[#121417]');
-                toast.classList.add('bg-red-600', 'text-white');
+                toast.classList.remove('bg-[#D4AF37]', 'text-[#121417]', 'border-[#AA771C]/30');
+                toast.classList.add('bg-red-600', 'text-white', 'border-red-800');
                 document.getElementById('toast-icon').className = 'fas fa-exclamation-triangle';
             } else {
-                toast.classList.add('bg-[#D4AF37]', 'text-[#121417]');
-                toast.classList.remove('bg-red-600', 'text-white');
+                toast.classList.add('bg-[#D4AF37]', 'text-[#121417]', 'border-[#AA771C]/30');
+                toast.classList.remove('bg-red-600', 'text-white', 'border-red-800');
                 document.getElementById('toast-icon').className = 'fas fa-check-circle';
             }
 
