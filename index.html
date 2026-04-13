@@ -159,19 +159,18 @@
     <div id="product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
         <div class="bg-card w-full max-w-2xl rounded-xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
             
-            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-darker z-10">
+            <div class="p-4 border-b border-white/10 flex justify-between items-center bg-darker z-20">
                 <h3 id="pm-title" class="font-serif font-bold text-xl gold-gradient-text">Nome do Produto</h3>
                 <button onclick="closeProductModal()" class="text-silver hover:text-white"><i class="fas fa-times text-xl"></i></button>
             </div>
 
             <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col">
-                <!-- Imagem do Modal -->
-                <div id="pm-img-container" class="w-full h-48 bg-darker hidden flex-shrink-0 relative">
-                    <img id="pm-img" src="" class="w-full h-full object-cover opacity-80">
-                    <div class="absolute inset-0 bg-gradient-to-t from-card to-transparent"></div>
+                <!-- Imagens do Modal (Carrossel) -->
+                <div id="pm-img-container" class="w-full h-48 bg-darker hidden flex-shrink-0 relative carousel-container">
+                    <!-- Imagens inseridas via JS -->
                 </div>
 
-                <div class="p-6">
+                <div class="p-6 relative z-10">
                     <p id="pm-desc" class="text-sm text-silver mb-6"></p>
                     
                     <!-- Lotes -->
@@ -278,6 +277,7 @@
         let valorFrete = 0;
         let cepDestino = "";
         let endDestino = {};
+        let globalCarouselInterval = null;
 
         // --- INICIALIZAÇÃO ---
         async function init() {
@@ -286,7 +286,6 @@
 
         async function carregarDadosDoNpoint() {
             try {
-                // Adicionado tempo (Date.now) para não pegar cache e atualizar na hora
                 const response = await fetch(`${API_JSON_URL}?t=${Date.now()}`);
                 const data = await response.json();
                 
@@ -312,20 +311,28 @@
         function renderizarCatalogo() {
             const grid = document.getElementById('products-grid');
             
-            // Loop para criar os cards com a nova estrutura de imagem
             grid.innerHTML = bd.produtos.map(p => {
-                // Previne erros se a array de lotes estiver vazia
                 const qtdBase = p.lotes && p.lotes.length > 0 ? p.lotes[p.lotes.length-1].qtd : 0;
                 
+                // Lógica para renderizar múltiplas imagens num carrossel
+                let imagensHTML = '';
+                if (p.imagens && p.imagens.length > 0) {
+                    imagensHTML = p.imagens.map((img, i) => `
+                        <img src="${img}" alt="Foto de ${p.nome}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-70 group-hover:opacity-100' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'">
+                    `).join('');
+                } else {
+                    imagensHTML = `<img src="https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto" class="w-full h-full object-cover opacity-70">`;
+                }
+
                 return `
                 <div class="bg-card rounded-xl border border-white/5 card-hover cursor-pointer overflow-hidden flex flex-col group" onclick="abrirModalProduto('${p.id}')">
-                    <div class="h-48 w-full relative bg-darker">
-                        <img src="${p.imagem}" alt="Foto de ${p.nome}" class="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-300" onerror="this.src='https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'">
-                        <div class="absolute top-3 right-3 bg-darker/90 backdrop-blur text-gold text-[10px] px-2 py-1 rounded border border-gold/30 font-bold uppercase tracking-wider shadow-lg">
+                    <div class="h-48 w-full relative bg-darker carousel-container">
+                        ${imagensHTML}
+                        <div class="absolute top-3 right-3 bg-darker/90 backdrop-blur text-gold text-[10px] px-2 py-1 rounded border border-gold/30 font-bold uppercase tracking-wider shadow-lg z-10">
                             A partir de ${qtdBase} un
                         </div>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
+                    <div class="p-6 flex-1 flex flex-col relative z-10">
                         <div class="flex items-center gap-3 mb-2">
                             <i class="fas ${p.icone} text-gold"></i>
                             <h3 class="font-serif font-bold text-xl text-white leading-tight">${p.nome}</h3>
@@ -340,10 +347,12 @@
             `}).join('');
 
             const samplesGrid = document.getElementById('samples-grid');
-            samplesGrid.innerHTML = bd.amostras.map(a => `
+            samplesGrid.innerHTML = bd.amostras.map(a => {
+                let imgAmostra = (a.imagens && a.imagens.length > 0) ? a.imagens[0] : '';
+                return `
                 <div class="bg-card border border-dashed border-white/20 rounded-xl overflow-hidden flex flex-col">
                     <div class="h-28 w-full relative bg-darker flex items-center justify-center overflow-hidden">
-                        <img src="${a.imagem}" alt="${a.nome}" class="w-full h-full object-cover opacity-50 blur-[2px]" onerror="this.style.display='none'">
+                        <img src="${imgAmostra}" alt="${a.nome}" class="w-full h-full object-cover opacity-50 blur-[2px]" onerror="this.style.display='none'">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <i class="fas ${a.icone} text-3xl text-gold drop-shadow-md"></i>
                         </div>
@@ -357,7 +366,9 @@
                         </div>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
+
+            iniciarCarrosseis();
         }
 
         function abrirModalProduto(id) {
@@ -369,13 +380,15 @@
             document.getElementById('pm-title').innerText = produto.nome;
             document.getElementById('pm-desc').innerText = produto.descricao;
 
-            // Mostrar a imagem no modal se ela existir no JSON
+            // Renderizar Imagens no Modal
             const imgContainer = document.getElementById('pm-img-container');
-            const imgEl = document.getElementById('pm-img');
-            if (produto.imagem) {
-                imgEl.src = produto.imagem;
-                // Previne imagem quebrada e usa a padrão
-                imgEl.onerror = () => { imgEl.src = 'https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'; };
+            if (produto.imagens && produto.imagens.length > 0) {
+                let imgsHTML = produto.imagens.map((img, i) => `
+                    <img src="${img}" class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${i === 0 ? 'opacity-80' : 'opacity-0'}" onerror="this.src='https://placehold.co/600x400/1a1c20/D4AF37?text=Sem+Foto'">
+                `).join('');
+                
+                // Adiciona um degradê por cima para não atrapalhar a leitura se a tela for pequena
+                imgContainer.innerHTML = imgsHTML + '<div class="absolute inset-0 bg-gradient-to-t from-card to-transparent z-10"></div>';
                 imgContainer.classList.remove('hidden');
             } else {
                 imgContainer.classList.add('hidden');
@@ -420,6 +433,35 @@
         function closeProductModal() {
             document.getElementById('product-modal').classList.add('hidden');
             document.getElementById('product-modal').classList.remove('flex');
+        }
+
+        // --- SISTEMA DE CARROSSEL ---
+        function iniciarCarrosseis() {
+            if (globalCarouselInterval) clearInterval(globalCarouselInterval);
+            globalCarouselInterval = setInterval(() => {
+                document.querySelectorAll('.carousel-container').forEach(container => {
+                    const imagens = container.querySelectorAll('.carousel-img');
+                    if (imagens.length <= 1) return; // Se só tiver uma imagem, não faz slide
+                    
+                    // Encontra a imagem atual visível
+                    let indiceAtual = Array.from(imagens).findIndex(img => img.classList.contains('opacity-80') || img.classList.contains('opacity-100') || img.classList.contains('group-hover:opacity-100'));
+                    if (indiceAtual === -1) indiceAtual = 0;
+                    
+                    // Esconde a atual
+                    imagens[indiceAtual].classList.remove('opacity-80', 'opacity-100', 'group-hover:opacity-100');
+                    imagens[indiceAtual].classList.add('opacity-0');
+                    
+                    // Mostra a próxima
+                    const proximoIndice = (indiceAtual + 1) % imagens.length;
+                    imagens[proximoIndice].classList.remove('opacity-0');
+                    // Mantém a lógica de opacidade diferente para modal vs vitrine
+                    if (container.id === 'pm-img-container') {
+                        imagens[proximoIndice].classList.add('opacity-80');
+                    } else {
+                        imagens[proximoIndice].classList.add('opacity-70', 'group-hover:opacity-100');
+                    }
+                });
+            }, 3000); // Passa a imagem a cada 3 segundos
         }
 
         function selecionarLote(index) {
