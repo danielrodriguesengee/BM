@@ -106,7 +106,6 @@
     <header class="fixed top-0 w-full z-40 glass-header">
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <!-- Usando um ícone SVG simulando a logo para manter um arquivo só, mas esteticamente fiel -->
                 <div class="w-10 h-10 border-2 border-gold rounded flex items-center justify-center font-serif font-bold text-xl gold-gradient-text tracking-tighter">
                     BM
                 </div>
@@ -205,9 +204,9 @@
                 <!-- Itens do Carrinho -->
             </div>
 
-            <!-- Calculo de Frete -->
+            <!-- Calculo de Frete Ajustado -->
             <div class="bg-darker p-4 rounded-xl border border-white/5 mb-6">
-                <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-truck text-gold"></i> Cálculo de Frete</h4>
+                <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i class="fas fa-truck text-gold"></i> Cálculo de Frete Estimado</h4>
                 <p class="text-[10px] text-silver mb-3">Origem: Parobé - RS (CEP: 95630-000)</p>
                 <div class="flex gap-2 mb-2">
                     <input type="text" id="cep-input" maxlength="9" placeholder="Digite seu CEP" class="input-dark w-full px-3 py-2 rounded text-sm" onkeyup="mascaraCEP(this)">
@@ -255,7 +254,7 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
-        // --- DADOS DO CATÁLOGO (Baseado no PDF) ---
+        // --- DADOS DO CATÁLOGO ---
         const bd = {
             produtos: [
                 {
@@ -400,7 +399,6 @@
             `).join('');
         }
 
-        // --- MODAL DE PRODUTO (CONFIGURADOR B2B) ---
         function abrirModalProduto(id) {
             const produto = bd.produtos.find(p => p.id === id);
             if(!produto) return;
@@ -423,7 +421,7 @@
                 </button>
             `).join('');
 
-            // Renderizar Extras se houver
+            // Renderizar Extras
             const contExtras = document.getElementById('pm-extras-container');
             const divExtras = document.getElementById('pm-extras');
             if(produto.extras && produto.extras.length > 0) {
@@ -441,7 +439,7 @@
                 contExtras.classList.add('hidden');
             }
 
-            selecionarLote(0); // Seleciona o primeiro por padrão
+            selecionarLote(0);
             document.getElementById('product-modal').classList.remove('hidden');
             document.getElementById('product-modal').classList.add('flex');
         }
@@ -494,7 +492,6 @@
             document.getElementById('pm-unit-price').innerText = `Ref. ${formatarMoeda(precoUnitarioFinal)} / un`;
         }
 
-        // --- CARRINHO ---
         function addToCart() {
             const prod = configAtual.produto;
             const lote = prod.lotes[configAtual.loteIndex];
@@ -527,6 +524,11 @@
             closeProductModal();
             atualizarCarrinho();
             mostrarToast("Lote adicionado ao orçamento!");
+            
+            // Recalcular frete se houver CEP digitado após adicionar novo item
+            if (document.getElementById('cep-input').value.length >= 8) {
+                calcularFrete();
+            }
         }
 
         function adicionarAmostra(id) {
@@ -544,6 +546,13 @@
         function removerItem(index) {
             carrinho.splice(index, 1);
             atualizarCarrinho();
+            if (carrinho.length > 0 && document.getElementById('cep-input').value.length >= 8) {
+                calcularFrete();
+            } else if (carrinho.length === 0) {
+                valorFrete = 0;
+                document.getElementById('cart-frete').innerText = "A calcular";
+                calcularTotais();
+            }
         }
 
         function atualizarCarrinho() {
@@ -596,13 +605,13 @@
             }
         }
 
-        // --- CALCULO DE FRETE (Mock Baseado em Distância de RS) ---
         function mascaraCEP(input) {
             let value = input.value.replace(/\D/g, '');
             if(value.length > 5) value = value.replace(/^(\d{5})(\d)/, '$1-$2');
             input.value = value;
         }
 
+        // --- CÁLCULO DE FRETE ATUALIZADO (Ajustado com os seus números reais) ---
         async function calcularFrete() {
             const cepInput = document.getElementById('cep-input').value.replace(/\D/g, '');
             const resultDiv = document.getElementById('frete-result');
@@ -624,41 +633,50 @@
             btnCalc.disabled = true;
 
             try {
-                // Utilizando API gratuita do ViaCEP para descobrir o estado
                 const response = await fetch(`https://viacep.com.br/ws/${cepInput}/json/`);
                 const data = await response.json();
 
-                if(data.erro) {
-                    throw new Error("CEP não encontrado");
-                }
+                if(data.erro) { throw new Error("CEP não encontrado"); }
 
                 endDestino = data;
                 const uf = data.uf;
                 
-                // Lógica MOCK de frete baseada na origem (Parobé - RS) e peso fictício
-                let pesoEstimadoKg = carrinho.reduce((acc, item) => item.tipo === 'lote' ? acc + (item.qtdItens * 0.05) : acc, 0); 
-                if(pesoEstimadoKg < 1) pesoEstimadoKg = 1;
-
-                let tarifaBase = 0;
+                // Pega a quantidade total de embalagens no carrinho
+                let totalUnidades = carrinho.reduce((acc, item) => item.tipo === 'lote' ? acc + item.qtdItens : acc, 0);
                 
-                // Distâncias do RS
+                let tarifaBase = 0;
+                let taxaPorUnidade = 0;
+                
                 const regiaoSul = ['RS', 'SC', 'PR'];
                 const regiaoSE_CO = ['SP', 'RJ', 'MG', 'ES', 'MS', 'MT', 'GO', 'DF'];
                 const regiaoNE = ['BA', 'SE', 'AL', 'PE', 'PB', 'RN', 'CE', 'PI', 'MA'];
                 const regiaoN = ['AM', 'PA', 'AC', 'RR', 'RO', 'AP', 'TO'];
 
-                if(uf === 'RS') tarifaBase = 35.00;
-                else if(regiaoSul.includes(uf)) tarifaBase = 55.00;
-                else if(regiaoSE_CO.includes(uf)) tarifaBase = 85.00;
-                else if(regiaoNE.includes(uf)) tarifaBase = 130.00;
-                else if(regiaoN.includes(uf)) tarifaBase = 160.00;
+                // FÓRMULA AJUSTADA BASEADA NOS SEUS NÚMEROS:
+                // MG (Sudeste) -> 100un = R$ 50,00  | 500un = R$ 120,00
+                // Isso significa uma taxa base de R$ 32,50 + R$ 0,175 por caixa.
+                if(uf === 'RS') { 
+                    tarifaBase = 20.00; taxaPorUnidade = 0.10; 
+                }
+                else if(regiaoSul.includes(uf)) { 
+                    tarifaBase = 25.00; taxaPorUnidade = 0.12; 
+                }
+                else if(regiaoSE_CO.includes(uf)) { 
+                    tarifaBase = 32.50; taxaPorUnidade = 0.175; 
+                }
+                else if(regiaoNE.includes(uf)) { 
+                    tarifaBase = 50.00; taxaPorUnidade = 0.25; 
+                }
+                else if(regiaoN.includes(uf)) { 
+                    tarifaBase = 70.00; taxaPorUnidade = 0.30; 
+                }
 
-                // Acrescenta valor por peso (simplificado)
-                valorFrete = tarifaBase + (pesoEstimadoKg * 1.50);
+                // Cálculo Final
+                valorFrete = tarifaBase + (totalUnidades * taxaPorUnidade);
 
                 cepDestino = `${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
                 
-                resultDiv.innerHTML = `<span class="text-green-400"><i class="fas fa-check-circle"></i> Envio via JadLog/Melhor Envio para ${data.localidade}/${data.uf}</span>`;
+                resultDiv.innerHTML = `<span class="text-green-400"><i class="fas fa-check-circle"></i> Envio via transportadora para ${data.localidade}/${data.uf}</span>`;
                 resultDiv.className = "text-xs mt-2 block";
                 
                 document.getElementById('cart-frete').innerText = formatarMoeda(valorFrete);
@@ -736,7 +754,6 @@
             }, 3000);
         }
 
-        // Run
         init();
     </script>
 </body>
