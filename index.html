@@ -323,9 +323,9 @@
 
             <!-- Redes Sociais e Direitos -->
             <div class="flex flex-col items-center md:items-end gap-4">
-                <a href="https://instagram.com/bmembalagensoficial" target="_blank" aria-label="Siga-nos no Instagram" class="flex items-center gap-2 text-2xl theme-text-secondary hover:text-[#D4AF37] transition-colors group">
+                <a href="https://instagram.com/bmembalagens" target="_blank" aria-label="Siga-nos no Instagram" class="flex items-center gap-2 text-2xl theme-text-secondary hover:text-[#D4AF37] transition-colors group">
                     <i class="fab fa-instagram"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-widest group-hover:text-[#D4AF37] transition-colors">@bmembalagensoficial</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest group-hover:text-[#D4AF37] transition-colors">@bmembalagens</span>
                 </a>
                 <div class="text-center md:text-right">
                     <p>&copy; <span id="footer-year">2026</span> BM Embalagens.</p>
@@ -990,27 +990,45 @@
             if(carrinho.length === 0) return mostrarToast("Seu carrinho está vazio.", true);
             if(!nome || !cnpj) return mostrarToast("Preencha Nome e CNPJ/CPF.", true);
 
-            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*\n-----------------------------------\n👤 *Cliente:* ${nome}\n📄 *CNPJ/CPF:* ${cnpj}\n`;
-            if(cepDestino) msg += `📍 *Destino:* ${cepDestino}\n`;
-            msg += `-----------------------------------\n\n*ITENS:*\n`;
+            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*\n`;
+            msg += `-----------------------------------\n`;
+            msg += `👤 *Cliente:* ${nome}\n`;
+            msg += `📄 *CNPJ/CPF:* ${cnpj}\n`;
+            
+            if(cepDestino) {
+                msg += `📍 *Destino:* ${cepDestino}\n`;
+            }
+            
+            msg += `-----------------------------------\n\n`;
+            msg += `*ITENS:*\n`;
             
             carrinho.forEach(item => {
-                msg += `📦 *${item.nome}*\n${item.desc !== 'Item único' ? `↳ _${item.desc}_\n` : ''}💰 ${formatarMoeda(item.valorTotal)}\n\n`;
+                msg += `📦 *${item.nome}*\n`;
+                if(item.desc !== 'Item único') {
+                    msg += `↳ _${item.desc}_\n`;
+                }
+                msg += `💰 ${formatarMoeda(item.valorTotal)}\n\n`;
             });
 
             const subtotal = carrinho.reduce((acc, item) => acc + item.valorTotal, 0);
-            msg += `-----------------------------------\n📊 *Subtotal:* ${formatarMoeda(subtotal)}\n`;
-            if(valorFrete > 0) msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}\n`;
-            msg += `💲 *TOTAL:* ${formatarMoeda(subtotal + valorFrete)}\n-----------------------------------\n_via Catálogo Online_`;
+            
+            msg += `-----------------------------------\n`;
+            msg += `📊 *Subtotal:* ${formatarMoeda(subtotal)}\n`;
+            if(valorFrete > 0) {
+                msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}\n`;
+            }
+            msg += `💲 *TOTAL:* ${formatarMoeda(subtotal + valorFrete)}\n`;
+            msg += `-----------------------------------\n`;
+            msg += `_via Catálogo Online_`;
 
-            window.open(`https://wa.me/5537984243487?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://api.whatsapp.com/send?phone=5537984243487&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         // --- FUNÇÃO DO BOTÃO WHATSAPP PULSANTE ---
         function ciaOpenWhatsApp() {
-            const numeroWhatsApp = "5537984243487"; // Número atualizado
+            const numeroWhatsApp = "5537984243487";
             const msgPreDefinida = "Olá! Gostaria de tirar algumas dúvidas sobre as embalagens.";
-            const link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msgPreDefinida)}`;
+            const link = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(msgPreDefinida)}`;
             window.open(link, '_blank');
         }
 
