@@ -45,6 +45,9 @@
             color: var(--text-primary);
             -webkit-tap-highlight-color: transparent;
             transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* Utilitários Temáticos */
@@ -60,6 +63,10 @@
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: var(--bg-darker); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
+
+        /* Ocultar barra de scroll nativa nos segmentos */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .glass-header {
             backdrop-filter: blur(12px);
@@ -133,7 +140,7 @@
             align-items: center;
             justify-content: center;
             font-size: 34px;
-            z-index: 80; /* Abaixo do modal/drawer mas acima do site */
+            z-index: 80;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             text-decoration: none;
             transition: transform 0.3s ease, background-color 0.3s ease;
@@ -184,17 +191,25 @@
     <header class="fixed top-0 w-full z-40 glass-header theme-bg-nav">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             
-            <!-- Esquerda: Menu Hamburguer -->
-            <button onclick="toggleSideMenu()" class="text-2xl theme-text-primary hover:text-[#D4AF37] transition focus:outline-none p-2 -ml-2" aria-label="Abrir Menu">
-                <i class="fas fa-bars"></i>
-            </button>
+            <!-- ESQUERDA: Menu Hambúrguer + Logo + Nome -->
+            <div class="flex items-center gap-3 md:gap-4">
+                <button onclick="toggleSideMenu()" class="text-2xl theme-text-primary hover:text-[#D4AF37] transition focus:outline-none p-2 -ml-2" aria-label="Abrir Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
 
-            <!-- Centro: Logotipo (Com fundo cinza sutil) -->
-            <div class="cursor-pointer bg-gray-400/20 dark:bg-gray-700/50 p-1.5 rounded-lg transition-transform active:scale-95" onclick="showHome()">
-                <img src="image/logo.webp" alt="BM Embalagens" class="h-8 md:h-10 w-auto object-contain drop-shadow-sm" onerror="this.src='https://placehold.co/100x40/9ca3af/ffffff?text=BM'">
+                <!-- Box da Logo escura garantindo visibilidade no claro, ao lado dos textos! -->
+                <div class="cursor-pointer flex items-center gap-3 transition-transform active:scale-95" onclick="showHome()">
+                    <div class="bg-[#121417] p-1.5 md:p-2 rounded-lg border border-[#D4AF37]/30 flex items-center justify-center drop-shadow-md">
+                        <img src="image/logo.webp" alt="BM Embalagens" class="h-6 md:h-8 w-auto object-contain" onerror="this.src='https://placehold.co/100x40/121417/D4AF37?text=BM'">
+                    </div>
+                    <div class="hidden sm:block mt-0.5">
+                        <h1 class="font-serif font-bold text-lg md:text-xl leading-none tracking-wide theme-text-primary">EMBALAGENS</h1>
+                        <p class="text-[9px] md:text-[10px] theme-text-secondary uppercase tracking-[0.1em] mt-0.5">Personalizadas Ltda.</p>
+                    </div>
+                </div>
             </div>
             
-            <!-- Direita: Tema e Carrinho -->
+            <!-- DIREITA: Tema e Carrinho -->
             <div class="flex items-center gap-2 md:gap-4">
                 <button onclick="toggleTheme()" class="theme-text-secondary hover:text-[#D4AF37] transition text-xl p-2 focus:outline-none" aria-label="Alternar Tema">
                     <i id="theme-icon" class="fas fa-moon"></i>
@@ -220,12 +235,12 @@
             <!-- Renderizado via JS -->
         </div>
         <div class="p-5 border-t theme-border theme-bg-darker text-center">
-            <p class="text-xs theme-text-secondary">BM Embalagens &copy; 2026</p>
+            <p class="text-xs theme-text-secondary">BM Embalagens &copy; <span id="menu-year">2026</span></p>
         </div>
     </div>
 
     <!-- MAIN CONTAINER -->
-    <main class="max-w-6xl mx-auto pt-24 pb-24 min-h-screen">
+    <main class="max-w-6xl mx-auto pt-24 flex-1 w-full">
         
         <!-- Loading Indicator -->
         <div id="loading-indicator" class="flex flex-col items-center justify-center py-20 text-[#D4AF37]">
@@ -235,15 +250,16 @@
 
         <!-- VISÃO 1: PÁGINA INICIAL (BANNERS E SEGMENTOS) -->
         <div id="view-home" class="hidden fade-in">
-            <!-- Banners Carousel -->
+            
+            <!-- MOSAICO DE BANNERS (Grid Responsivo baseado na referência) -->
             <div class="px-4 mb-12">
-                <div class="rounded-2xl overflow-hidden h-48 md:h-80 relative theme-bg-darker shadow-lg group" id="banner-container">
-                    <!-- Banners via JS -->
+                <div id="banner-grid-container" class="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-[200px] md:auto-rows-[auto]">
+                    <!-- Injetado via Javascript baseado em bd.banners -->
                 </div>
             </div>
 
             <!-- Seção de Segmentos / Categorias (Design Redondo) -->
-            <div class="px-4 mb-12">
+            <div class="px-4 mb-12 mt-16">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="font-serif text-2xl md:text-3xl font-bold theme-text-primary">Nossos Segmentos</h2>
                     <div class="flex gap-2">
@@ -252,14 +268,23 @@
                     </div>
                 </div>
                 
-                <div class="flex overflow-x-auto gap-6 pb-6 pt-2 custom-scrollbar snap-x snap-mandatory" id="segments-grid">
+                <!-- Container sem barra de rolagem aparente -->
+                <div class="flex overflow-x-auto gap-6 pb-6 pt-2 no-scrollbar snap-x snap-mandatory scroll-smooth" id="segments-grid">
                     <!-- Segmentos renderizados via JS -->
                 </div>
+            </div>
+
+            <!-- SEÇÃO QUEM SOMOS -->
+            <div class="px-4 mb-12 mt-20 text-center max-w-4xl mx-auto">
+                <h2 class="font-serif text-2xl md:text-3xl font-bold theme-text-primary mb-6 uppercase">Quem Somos</h2>
+                <p class="theme-text-secondary text-sm md:text-base leading-relaxed">
+                    Somos a B&M embalagens, especialistas que unem design e engenharia de papel para criar embalagens que elevam a percepção de sofisticação do seu produto. Acreditamos que cada detalhe — textura, cor, ergonomia — comunica valor, e é por isso que tratamos sua embalagem como extensão da sua marca.
+                </p>
             </div>
         </div>
 
         <!-- VISÃO 2: PRODUTOS DA CATEGORIA -->
-        <div id="view-category" class="hidden px-4 fade-in">
+        <div id="view-category" class="hidden px-4 fade-in pb-24">
             <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <button onclick="showHome()" class="text-sm font-bold text-[#D4AF37] hover:opacity-80 transition mb-2 flex items-center gap-2">
@@ -282,8 +307,27 @@
                 <button onclick="showHome()" class="mt-6 btn-outline-gold px-6 py-2 rounded-full text-sm font-bold">Voltar</button>
             </div>
         </div>
-
     </main>
+
+    <!-- RODAPÉ INSTITUCIONAL -->
+    <footer class="w-full theme-bg-card border-t theme-border py-8 mt-auto z-10">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 theme-text-secondary text-xs">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
+                <div class="bg-[#121417] p-2 rounded-lg border border-[#D4AF37]/30 flex items-center justify-center opacity-80">
+                    <img src="image/logo.webp" alt="BM Embalagens" class="h-6 w-auto object-contain" onerror="this.src='https://placehold.co/100x40/121417/D4AF37?text=BM'">
+                </div>
+                <div>
+                    <p class="font-bold theme-text-primary text-sm mb-1 uppercase tracking-wide">BM Embalagens Personalizadas LTDA</p>
+                    <p>CNPJ: 59.469.838/0001-71</p>
+                    <p>Rua Armindo Schmitd, 832 - Laranjeiras - Parobé/RS</p>
+                </div>
+            </div>
+            <div class="text-center md:text-right">
+                <p>&copy; <span id="footer-year">2026</span> BM Embalagens.</p>
+                <p class="mt-1 opacity-70">Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- MODAL DO PRODUTO (CONFIGURADOR) -->
     <div id="product-modal" class="fixed inset-0 z-[80] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
@@ -398,7 +442,6 @@
 
     <!-- SCRIPTS -->
     <script>
-        // URL DO JSON NO NPOINT
         const API_JSON_URL = 'https://api.npoint.io/41aa4bf80479b83f68d7';
 
         let bd = { banners: [], categorias: [], produtos: [], amostras: [] };
@@ -407,11 +450,13 @@
         let valorFrete = 0;
         let cepDestino = "";
         let endDestino = {};
-        let bannerInterval = null;
         let productInterval = null;
+        let bannerInterval = null;
 
         // --- INICIALIZAÇÃO E TEMA ---
         async function init() {
+            document.getElementById('menu-year').textContent = new Date().getFullYear();
+            document.getElementById('footer-year').textContent = new Date().getFullYear();
             await carregarDadosDoNpoint();
         }
 
@@ -430,10 +475,13 @@
                 if(data && data.categorias) {
                     bd = data;
                     
+                    // Lógica para injetar carrossel nos banners se os arrays "imagens" existirem ou criar fallback grid
                     if(!bd.banners || bd.banners.length === 0) {
                         bd.banners = [
-                            { imagem: "https://placehold.co/1200x400/D4AF37/121417?text=BM+Embalagens+-+Premium", link: "#" },
-                            { imagem: "https://placehold.co/1200x400/121417/D4AF37?text=Sua+Marca+Em+Destaque", link: "#" }
+                            { imagens: ["https://placehold.co/800x500/121417/D4AF37?text=As+Melhores+Embalagens", "https://placehold.co/800x500/1a1c20/D4AF37?text=Qualidade+Premium"], link: "#" },
+                            { imagem: "https://placehold.co/400x500/D4AF37/121417?text=Ofertas", link: "#" },
+                            { imagem: "https://placehold.co/600x300/1a1c20/D4AF37?text=Delivery+Pratico", link: "#" },
+                            { imagem: "https://placehold.co/600x300/121417/D4AF37?text=Tudo+Para+Sua+Empresa", link: "#" }
                         ];
                     }
 
@@ -478,31 +526,69 @@
             renderizarProdutos(idCat);
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Fecha menu lateral se estiver aberto
             if(!document.getElementById('side-menu').classList.contains('-translate-x-full')) {
                 toggleSideMenu();
             }
         }
 
-        // --- RENDERIZAÇÃO HOME ---
+        // --- RENDERIZAÇÃO HOME (MOSAICO BANNERS COM CARROSSEL) ---
         function renderizarBanners() {
-            const container = document.getElementById('banner-container');
-            container.innerHTML = bd.banners.map((b, i) => `
-                <img src="${b.imagem}" class="banner-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Banner promocional">
-            `).join('');
+            const container = document.getElementById('banner-grid-container');
+            if(!bd.banners || bd.banners.length === 0) return;
 
-            if(bd.banners.length > 1) {
-                if(bannerInterval) clearInterval(bannerInterval);
-                bannerInterval = setInterval(() => {
-                    const imgs = container.querySelectorAll('.banner-img');
-                    let atual = Array.from(imgs).findIndex(img => img.classList.contains('opacity-100'));
-                    imgs[atual].classList.remove('opacity-100'); imgs[atual].classList.add('opacity-0');
-                    const proximo = (atual + 1) % imgs.length;
-                    imgs[proximo].classList.remove('opacity-0'); imgs[proximo].classList.add('opacity-100');
-                }, 4000);
-            }
+            const gridClasses = [
+                "md:col-span-8 md:row-span-2 h-48 md:h-[416px]", // 1º
+                "md:col-span-4 md:row-span-1 h-48 md:h-[200px]", // 2º
+                "md:col-span-6 md:row-span-1 h-48 md:h-[200px]", // 3º
+                "md:col-span-6 md:row-span-1 h-48 md:h-[200px]"  // 4º
+            ];
+
+            let html = '';
+            
+            bd.banners.slice(0, 4).forEach((b, i) => {
+                const cssClass = gridClasses[i] || "md:col-span-12 h-48"; 
+                let imgsHTML = '';
+                
+                // Se existe array de imagens no JSON, cria o carrossel local. Se não, usa a imagem estática.
+                if (b.imagens && b.imagens.length > 0) {
+                    imgsHTML = b.imagens.map((img, j) => `<img src="${img}" class="banner-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${j === 0 ? 'opacity-100' : 'opacity-0'}" alt="Banner promocional">`).join('');
+                } else {
+                    imgsHTML = `<img src="${b.imagem}" class="banner-img absolute inset-0 w-full h-full object-cover opacity-100" alt="Banner promocional" onerror="this.src='https://placehold.co/800x400/121417/D4AF37?text=BM+Embalagens'">`;
+                }
+
+                html += `
+                    <a href="${b.link || '#'}" class="${cssClass} block relative rounded-2xl md:rounded-3xl overflow-hidden shadow-sm group banner-carousel-container">
+                        ${imgsHTML}
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
+                    </a>
+                `;
+            });
+            
+            container.innerHTML = html;
+            iniciarCarrosselBanners();
         }
 
+        function iniciarCarrosselBanners() {
+            if (bannerInterval) clearInterval(bannerInterval);
+            bannerInterval = setInterval(() => {
+                document.querySelectorAll('.banner-carousel-container').forEach(container => {
+                    const imagens = container.querySelectorAll('.banner-img');
+                    if (imagens.length <= 1) return;
+                    
+                    let indiceAtual = Array.from(imagens).findIndex(img => img.classList.contains('opacity-100'));
+                    if (indiceAtual === -1) indiceAtual = 0;
+                    
+                    imagens[indiceAtual].classList.remove('opacity-100');
+                    imagens[indiceAtual].classList.add('opacity-0');
+                    
+                    const proximoIndice = (indiceAtual + 1) % imagens.length;
+                    imagens[proximoIndice].classList.remove('opacity-0');
+                    imagens[proximoIndice].classList.add('opacity-100');
+                });
+            }, 4000);
+        }
+
+        // --- SEGMENTOS ---
         function renderizarSegmentos() {
             const grid = document.getElementById('segments-grid');
             grid.innerHTML = bd.categorias.map(cat => {
@@ -519,13 +605,26 @@
                     <span class="text-[11px] md:text-xs font-bold text-center theme-text-primary leading-tight line-clamp-2 px-1 group-hover:text-[#D4AF37] transition-colors">${cat.nome}</span>
                 </div>
             `}).join('');
+
+            // Efeito visual sutil (puxada) indicando scroll
+            setTimeout(() => {
+                if (grid && grid.scrollWidth > grid.clientWidth) {
+                    grid.scrollBy({ left: 60, behavior: 'smooth' });
+                    setTimeout(() => {
+                        grid.scrollBy({ left: -60, behavior: 'smooth' });
+                    }, 400);
+                }
+            }, 1500);
         }
 
         function scrollSegments(dir) {
             const container = document.getElementById('segments-grid');
-            container.scrollBy({ left: dir * 200, behavior: 'smooth' });
+            if (container) {
+                container.scrollBy({ left: dir * 200, behavior: 'smooth' });
+            }
         }
 
+        // --- MENU LATERAL ---
         function renderizarMenuLateral() {
             const list = document.getElementById('side-menu-list');
             list.innerHTML = bd.categorias.map(cat => `
