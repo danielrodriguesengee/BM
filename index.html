@@ -323,9 +323,9 @@
 
             <!-- Redes Sociais e Direitos -->
             <div class="flex flex-col items-center md:items-end gap-4">
-                <a href="https://instagram.com/bmembalagens" target="_blank" aria-label="Siga-nos no Instagram" class="flex items-center gap-2 text-2xl theme-text-secondary hover:text-[#D4AF37] transition-colors group">
+                <a href="https://instagram.com/bmembalagensoficial" target="_blank" aria-label="Siga-nos no Instagram" class="flex items-center gap-2 text-2xl theme-text-secondary hover:text-[#D4AF37] transition-colors group">
                     <i class="fab fa-instagram"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-widest group-hover:text-[#D4AF37] transition-colors">@bmembalagens</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest group-hover:text-[#D4AF37] transition-colors">@bmembalagensoficial</span>
                 </a>
                 <div class="text-center md:text-right">
                     <p>&copy; <span id="footer-year">2026</span> BM Embalagens.</p>
@@ -990,25 +990,25 @@
             if(carrinho.length === 0) return mostrarToast("Seu carrinho está vazio.", true);
             if(!nome || !cnpj) return mostrarToast("Preencha Nome e CNPJ/CPF.", true);
 
-            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*%0A-----------------------------------%0A👤 *Cliente:* ${nome}%0A📄 *CNPJ/CPF:* ${cnpj}%0A`;
-            if(cepDestino) msg += `📍 *Destino:* ${cepDestino}%0A`;
-            msg += `-----------------------------------%0A%0A*ITENS:*%0A`;
+            let msg = `*NOVO ORÇAMENTO - BM EMBALAGENS*\n-----------------------------------\n👤 *Cliente:* ${nome}\n📄 *CNPJ/CPF:* ${cnpj}\n`;
+            if(cepDestino) msg += `📍 *Destino:* ${cepDestino}\n`;
+            msg += `-----------------------------------\n\n*ITENS:*\n`;
             
             carrinho.forEach(item => {
-                msg += `📦 *${item.nome}*%0A${item.desc !== 'Item único' ? `↳ _${item.desc}_%0A` : ''}💰 ${formatarMoeda(item.valorTotal)}%0A%0A`;
+                msg += `📦 *${item.nome}*\n${item.desc !== 'Item único' ? `↳ _${item.desc}_\n` : ''}💰 ${formatarMoeda(item.valorTotal)}\n\n`;
             });
 
             const subtotal = carrinho.reduce((acc, item) => acc + item.valorTotal, 0);
-            msg += `-----------------------------------%0A📊 *Subtotal:* ${formatarMoeda(subtotal)}%0A`;
-            if(valorFrete > 0) msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}%0A`;
-            msg += `💲 *TOTAL:* ${formatarMoeda(subtotal + valorFrete)}%0A-----------------------------------%0A_via Catálogo Online_`;
+            msg += `-----------------------------------\n📊 *Subtotal:* ${formatarMoeda(subtotal)}\n`;
+            if(valorFrete > 0) msg += `🚚 *Frete Est.:* ${formatarMoeda(valorFrete)}\n`;
+            msg += `💲 *TOTAL:* ${formatarMoeda(subtotal + valorFrete)}\n-----------------------------------\n_via Catálogo Online_`;
 
             window.open(`https://wa.me/5537984243487?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         // --- FUNÇÃO DO BOTÃO WHATSAPP PULSANTE ---
         function ciaOpenWhatsApp() {
-            const numeroWhatsApp = "5537984243487"; // Substituir pelo seu número real
+            const numeroWhatsApp = "5537984243487"; // Número atualizado
             const msgPreDefinida = "Olá! Gostaria de tirar algumas dúvidas sobre as embalagens.";
             const link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msgPreDefinida)}`;
             window.open(link, '_blank');
