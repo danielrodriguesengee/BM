@@ -8,6 +8,20 @@
     <!-- Ícone da aba do navegador (Favicon) -->
     <link rel="icon" type="image/webp" href="image/logo.webp">
     <link rel="apple-touch-icon" href="image/logo.webp">
+
+    <!-- ======================================================= -->
+    <!-- SEO & OPEN GRAPH (PREVIEW DO WHATSAPP / INSTAGRAM) -->
+    <!-- ======================================================= -->
+    <meta name="description" content="Especialistas em embalagens que unem design e engenharia de papel para elevar a percepção de sofisticação do seu produto.">
+    <meta property="og:title" content="BM Embalagens Personalizadas | Catálogo">
+    <meta property="og:description" content="Descubra nossa linha de embalagens premium anti-vazamento. A extensão da sua marca começa aqui!">
+    <meta property="og:type" content="website">
+    
+    <!-- ⚠️ IMPORTANTE: Troque "SEUSITE.netlify.app" pelo link real do seu site no Netlify -->
+    <meta property="og:url" content="https://SEUSITE.netlify.app/">
+    <meta property="og:image" content="https://SEUSITE.netlify.app/image/logo.webp">
+    <!-- Se o WhatsApp não ler o .webp, troque a imagem acima por um .png ou .jpg de até 300kb -->
+    <!-- ======================================================= -->
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -197,7 +211,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <!-- Box da Logo escura garantindo visibilidade no claro, ao lado dos textos! -->
+                <!-- Box da Logo escura garantindo visibilidade no claro -->
                 <div class="cursor-pointer flex items-center gap-3 transition-transform active:scale-95" onclick="showHome()">
                     <div class="bg-[#121417] p-1.5 md:p-2 rounded-lg border border-[#D4AF37]/30 flex items-center justify-center drop-shadow-md">
                         <img src="image/logo.webp" alt="BM Embalagens" class="h-6 md:h-8 w-auto object-contain" onerror="this.src='https://placehold.co/100x40/121417/D4AF37?text=BM'">
@@ -251,20 +265,19 @@
         <!-- VISÃO 1: PÁGINA INICIAL (BANNERS E SEGMENTOS) -->
         <div id="view-home" class="hidden fade-in">
             
-            <!-- MOSAICO DE BANNERS (Banners Sorteados Dinamicamente dos Produtos) -->
+            <!-- MOSAICO DE BANNERS (Banners Sorteados Dinamicamente) -->
             <div class="px-4 mb-12">
                 <div id="banner-grid-container" class="grid grid-cols-1 md:grid-cols-12 gap-4 auto-rows-[200px] md:auto-rows-[auto]">
-                    <!-- Injetado via Javascript baseado em bd.produtos -->
+                    <!-- Injetado via Javascript -->
                 </div>
             </div>
 
-            <!-- Seção de Segmentos / Categorias (Design Redondo) -->
+            <!-- Seção de Segmentos / Categorias -->
             <div class="px-4 mb-12 mt-16">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="font-serif text-2xl md:text-3xl font-bold theme-text-primary">Nossos Segmentos</h2>
                 </div>
                 
-                <!-- Container sem barra de rolagem aparente -->
                 <div class="flex overflow-x-auto gap-6 pb-6 pt-2 no-scrollbar snap-x snap-mandatory scroll-smooth" id="segments-grid">
                     <!-- Segmentos renderizados via JS -->
                 </div>
@@ -305,11 +318,10 @@
         </div>
     </main>
 
-    <!-- RODAPÉ INSTITUCIONAL (COM INSTAGRAM MINIMALISTA) -->
+    <!-- RODAPÉ INSTITUCIONAL -->
     <footer class="w-full theme-bg-card border-t theme-border py-10 mt-auto z-10">
         <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8 theme-text-secondary text-xs">
             
-            <!-- Dados da Empresa -->
             <div class="flex flex-col md:flex-row items-center md:items-start gap-4 text-center md:text-left">
                 <div class="bg-[#121417] p-2 rounded-lg border border-[#D4AF37]/30 flex items-center justify-center opacity-80">
                     <img src="image/logo.webp" alt="BM Embalagens" class="h-6 w-auto object-contain" onerror="this.src='https://placehold.co/100x40/121417/D4AF37?text=BM'">
@@ -321,7 +333,6 @@
                 </div>
             </div>
 
-            <!-- Redes Sociais e Direitos -->
             <div class="flex flex-col items-center md:items-end gap-4">
                 <a href="https://instagram.com/bmembalagens" target="_blank" aria-label="Siga-nos no Instagram" class="flex items-center gap-2 text-2xl theme-text-secondary hover:text-[#D4AF37] transition-colors group">
                     <i class="fab fa-instagram"></i>
@@ -347,12 +358,10 @@
 
             <div class="overflow-y-auto custom-scrollbar flex-1 flex flex-col md:flex-row">
                 
-                <!-- Coluna Esquerda: Imagem -->
                 <div id="pm-img-container" class="w-full md:w-2/5 h-48 md:h-auto theme-bg-darker hidden md:flex flex-shrink-0 relative carousel-container border-b md:border-b-0 md:border-r theme-border">
                     <!-- Imagens JS Slide -->
                 </div>
 
-                <!-- Coluna Direita: Opções -->
                 <div class="p-6 flex-1 flex flex-col">
                     <p id="pm-desc" class="text-sm theme-text-secondary mb-6 leading-relaxed"></p>
                     
@@ -442,7 +451,7 @@
         <i id="toast-icon" class="fas fa-check-circle"></i> <span id="toast-msg">Mensagem</span>
     </div>
 
-    <!-- BOTÃO WHATSAPP PULSANTE (FIXO) -->
+    <!-- BOTÃO WHATSAPP PULSANTE -->
     <a href="#" class="ciaweb-whatsapp-button" id="ciaweb-whatsapp-btn" onclick="ciaOpenWhatsApp(); return false;" aria-label="Fale conosco no WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
@@ -460,7 +469,7 @@
         
         let productInterval = null;
         let bannerInterval = null;
-        let modalInterval = null; // Controle independente do Carrossel do Modal Configurator
+        let modalInterval = null;
 
         // --- INICIALIZAÇÃO E TEMA ---
         async function init() {
@@ -485,7 +494,7 @@
                     bd = data;
                     document.getElementById('loading-indicator').classList.add('hidden');
                     renderizarMenuLateral();
-                    renderizarBanners(); // Usará os produtos aleatoriamente como os 4 banners
+                    renderizarBanners(); 
                     renderizarSegmentos();
                     showHome();
                 } else {
@@ -501,7 +510,6 @@
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // --- NAVEGAÇÃO SPA (Home <-> Category) ---
         function showHome() {
             document.getElementById('view-category').classList.add('hidden');
             document.getElementById('view-home').classList.remove('hidden');
@@ -529,21 +537,19 @@
             }
         }
 
-        // --- RENDERIZAÇÃO HOME (MOSAICO BANNERS DINÂMICOS DOS PRODUTOS) ---
+        // --- RENDERIZAÇÃO BANNERS ---
         function renderizarBanners() {
             const container = document.getElementById('banner-grid-container');
             if(!bd.produtos || bd.produtos.length === 0) return;
 
-            // Sorteia aleatoriamente os produtos para colocar em destaque nos Banners
             const produtosEmbaralhados = [...bd.produtos].sort(() => 0.5 - Math.random());
             const produtosDestaque = produtosEmbaralhados.slice(0, 4);
 
-            // Classes baseadas no design da imagem de referência
             const gridClasses = [
-                "md:col-span-8 md:row-span-1 h-48 md:h-[280px]", // 1º Gigante a Esquerda
-                "md:col-span-4 md:row-span-1 h-48 md:h-[280px]", // 2º Canto Superior Direito
-                "md:col-span-6 md:row-span-1 h-48 md:h-[200px]", // 3º Base Esquerda
-                "md:col-span-6 md:row-span-1 h-48 md:h-[200px]"  // 4º Base Direita
+                "md:col-span-8 md:row-span-1 h-48 md:h-[280px]",
+                "md:col-span-4 md:row-span-1 h-48 md:h-[280px]",
+                "md:col-span-6 md:row-span-1 h-48 md:h-[200px]",
+                "md:col-span-6 md:row-span-1 h-48 md:h-[200px]"
             ];
 
             let html = '';
@@ -552,7 +558,6 @@
                 const cssClass = gridClasses[i] || "md:col-span-12 h-48"; 
                 let imgsHTML = '';
                 
-                // Animação de slide se houver mais de uma imagem
                 if (p.imagens && p.imagens.length > 0) {
                     imgsHTML = p.imagens.map((img, j) => `<img src="${img}" class="banner-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${j === 0 ? 'opacity-100' : 'opacity-0'}" alt="${p.nome}" onerror="this.src='https://placehold.co/800x400/121417/D4AF37?text=Sem+Foto'">`).join('');
                 } else {
@@ -562,9 +567,7 @@
                 html += `
                     <div onclick="abrirModalProduto('${p.id}')" class="${cssClass} block relative rounded-2xl md:rounded-3xl overflow-hidden shadow-sm group banner-carousel-container cursor-pointer bg-black">
                         ${imgsHTML}
-                        <!-- Degrade escuro embaixo para garantir a leitura do texto -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
-                        
                         <div class="absolute bottom-5 left-5 right-5 z-10 translate-y-2 group-hover:translate-y-0 transition-transform">
                             <span class="text-[#121417] bg-[#D4AF37] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded shadow-sm mb-2 inline-block">Destaque</span>
                             <h3 class="text-white font-serif font-bold text-lg md:text-xl leading-tight line-clamp-2 shadow-black drop-shadow-md">${p.nome}</h3>
@@ -615,7 +618,6 @@
                 </div>
             `}).join('');
 
-            // Efeito visual sutil (puxada) indicando que há scroll
             setTimeout(() => {
                 if (grid && grid.scrollWidth > grid.clientWidth) {
                     grid.scrollBy({ left: 60, behavior: 'smooth' });
@@ -649,7 +651,7 @@
             overlay.classList.toggle('hidden');
         }
 
-        // --- RENDERIZAÇÃO PRODUTOS ---
+        // --- PRODUTOS ---
         function renderizarProdutos(categoriaId) {
             const grid = document.getElementById('products-grid');
             const emptyState = document.getElementById('empty-products');
@@ -720,7 +722,7 @@
             }, 3500);
         }
 
-        // --- LÓGICA DE PRODUTOS / MODAL (CONFIGURADOR B2B) ---
+        // --- MODAL DE PRODUTOS ---
         function abrirModalProduto(id) {
             const produto = bd.produtos.find(p => p.id === id);
             if(!produto) return;
@@ -730,7 +732,6 @@
             document.getElementById('pm-title').innerText = produto.nome;
             document.getElementById('pm-desc').innerText = produto.descricao;
 
-            // Insere as imagens no Modal
             const imgContainer = document.getElementById('pm-img-container');
             if (produto.imagens && produto.imagens.length > 0) {
                 let imgsHTML = produto.imagens.map((img, i) => `
@@ -740,7 +741,6 @@
                 imgContainer.classList.remove('hidden');
                 imgContainer.classList.add('flex');
                 
-                // Inicia a animação de SLIDE dentro do configurador de lotes!
                 iniciarCarrosselModal();
             } else {
                 imgContainer.classList.add('hidden');
@@ -782,7 +782,6 @@
             document.getElementById('product-modal').classList.add('flex');
         }
 
-        // Slider (Carrossel) Independente para a janela de Configuração
         function iniciarCarrosselModal() {
             if (modalInterval) clearInterval(modalInterval);
             modalInterval = setInterval(() => {
@@ -1024,7 +1023,6 @@
             window.open(`https://api.whatsapp.com/send?phone=5537984243487&text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- FUNÇÃO DO BOTÃO WHATSAPP PULSANTE ---
         function ciaOpenWhatsApp() {
             const numeroWhatsApp = "5537984243487";
             const msgPreDefinida = "Olá! Gostaria de tirar algumas dúvidas sobre as embalagens.";
